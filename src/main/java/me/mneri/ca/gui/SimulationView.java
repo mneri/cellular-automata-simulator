@@ -14,6 +14,7 @@ public class SimulationView extends JFrame {
     private JButton mPlayButton;
     private SimulationPanel mSimulationPanel;
     private JButton mSettingsButton;
+    private JLabel mStatusLabel;
     private JButton mStepButton;
     private JButton mZoomInButton;
     private JButton mZoomOriginalButton;
@@ -32,7 +33,18 @@ public class SimulationView extends JFrame {
         mSimulationPanel = new SimulationPanel();
         add(mSimulationPanel, BorderLayout.CENTER);
 
+        buildStatusbar();
+
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
+    }
+
+    private void buildStatusbar() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        add(panel, BorderLayout.SOUTH);
+
+        mStatusLabel = new JLabel();
+        panel.add(mStatusLabel);
     }
 
     private void buildToolbar() {
@@ -84,6 +96,10 @@ public class SimulationView extends JFrame {
 
     public SimulationPanel getSimulationPanel() {
         return mSimulationPanel;
+    }
+
+    public JLabel getStatusLabel() {
+        return mStatusLabel;
     }
 
     public JButton getStepButton() {

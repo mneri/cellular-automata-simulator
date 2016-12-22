@@ -99,10 +99,13 @@ public class SimulationController {
 
     private void init() {
         Settings settings = Application.instance().getSettings();
-        SimulationPanel simPanel = mView.getSimulationPanel();
 
+        SimulationPanel simPanel = mView.getSimulationPanel();
         simPanel.setBackgroundColor(settings.getBackgroundColor());
         simPanel.setDiagram(mModel.getDiagram());
+
+        JLabel statusLabel = mView.getStatusLabel();
+        statusLabel.setText(" ");
     }
 
     public void showView() {
