@@ -7,13 +7,19 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    flatDir name: 'libs', dirs: 'libs'
 }
 
 dependencies {
+    compile name: 'infodynamics'
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
 
 jar {
+    from configurations.compile.collect {
+        it.isDirectory() ? it : zipTree(it)
+    }
+
     manifest {
         attributes 'Main-Class': 'me.mneri.ca.app.Application'
     }
