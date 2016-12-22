@@ -1,5 +1,7 @@
 package me.mneri.ca.measures;
 
+import me.mneri.ca.util.MathUtils;
+
 public class Entropy {
 
 	// calculate global entropy in a binary data stream
@@ -14,7 +16,7 @@ public class Entropy {
 		if (fone == 0.0 || fzero == 0.0)
 			return 0;
 		
-		return -(fone * Log.get(fone, 2) + fzero * Log.get(fzero, 2));
+		return -(fone * MathUtils.log2(fone) + fzero * MathUtils.log2(fzero));
 	}
 
 	// calculate local entropy in a binary data stream for given value
@@ -29,7 +31,7 @@ public class Entropy {
 			}
 			double fval = mVal / states.length;
 
-			return -Log.get(fval, 2);
+			return -MathUtils.log2(fval);
 
 		} else
 			throw new IllegalArgumentException("Value must be 1 or 0");
@@ -41,10 +43,10 @@ public class Entropy {
 		double[][] result = pairsFrequencies(x, y);
 
 		// computing local joint entropies
-		result[0][0] = -Log.get(result[0][0], 2);
-		result[0][1] = -Log.get(result[0][1], 2);
-		result[1][0] = -Log.get(result[1][0], 2);
-		result[1][1] = -Log.get(result[1][1], 2);
+		result[0][0] = -MathUtils.log2(result[0][0]);
+		result[0][1] = -MathUtils.log2(result[0][1]);
+		result[1][0] = -MathUtils.log2(result[1][0]);
+		result[1][1] = -MathUtils.log2(result[1][1]);
 
 		return result;
 	}
