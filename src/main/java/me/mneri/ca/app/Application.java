@@ -24,11 +24,7 @@ public class Application {
         sInstance.mLoop.enqueue(runnable);
     }
 
-    public static void main(String... args) {
-        Application.instance().run();
-    }
-
-    private void run() {
+    public void run() {
         mLoop.start();
         mLoop.enqueue(() -> {
             try {
