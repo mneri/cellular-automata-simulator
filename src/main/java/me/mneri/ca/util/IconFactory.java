@@ -1,12 +1,10 @@
 package me.mneri.ca.util;
 
-import java.io.File;
-
 import javax.swing.*;
 
 public class IconFactory {
     private static final int CACHE_SIZE = 128;
-    private static final String BASEDIR = String.join(File.separator, "", "me", "mneri", "ca", "icon", "");
+    private static final String BASEDIR = "/me/mneri/ca/icon/";
 
     private static IconFactory sInstance;
 

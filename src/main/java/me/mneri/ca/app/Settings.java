@@ -12,7 +12,7 @@ import me.mneri.ca.util.Colors;
 import me.mneri.ca.util.Fs;
 
 public class Settings {
-    private static final String JAR_PROPS = Fs.path("", "me", "mneri", "ca", "conf.properties");
+    private static final String JAR_PROPS = "/me/mneri/ca/conf.properties";
     private static final String USER_HOME = System.getProperty("user.home");
     private static final String USER_PROPS = Fs.path(USER_HOME, ".local", "share", "me.mneri.ca", "conf.properties");
 
