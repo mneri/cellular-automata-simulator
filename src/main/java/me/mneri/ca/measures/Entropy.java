@@ -13,6 +13,7 @@ public class Entropy {
 		double fzero = 1 - fone;
 		if (fone == 0.0 || fzero == 0.0)
 			return 0;
+		
 		return -(fone * Log.get(fone, 2) + fzero * Log.get(fzero, 2));
 	}
 
@@ -62,11 +63,6 @@ public class Entropy {
 
 		return res;
 	}
-
-	// --------------------------------------------------------------------------------
-	// --------------------- PRIVATE FUNCTIONS
-	// ----------------------------------
-	// --------------------------------------------------------------------------------
 
 	// calculate relative frequence (for each pair) given two data streams
 	private static double[][] pairsFrequencies(int[] x, int[] y) {
