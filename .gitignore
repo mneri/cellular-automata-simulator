@@ -4,3 +4,7 @@ build/
 gradle/
 out/
 *.iml
+/bin/
+.classpath
+.project
+.settings

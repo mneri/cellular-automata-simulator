@@ -5,7 +5,7 @@ import me.mneri.ca.util.MathUtils;
 public class Entropy {
 
     // calculate global entropy in a binary data stream
-    public static double globalBinaryEntropy(int[] states) {
+    public static double globalEntropy(int[] states) {
 
         float ones = 0;
         for (int i = 0; i < states.length; i++)
@@ -35,7 +35,7 @@ public class Entropy {
     }
 
     // calculate local entropy in a binary data stream for given value
-    public static double localBinaryEntropy(int[] states, int value) {
+    public static double localEntropy(int[] states, int value) {
 
         if (value == 0 || value == 1) {
 
@@ -46,7 +46,7 @@ public class Entropy {
             }
             double fval = mVal / states.length;
 
-            return -MathUtils.log2(fval);
+            return fval!=0.0?-MathUtils.log2(fval):0.0;
 
         } else
             throw new IllegalArgumentException("Value must be 1 or 0");
@@ -58,17 +58,50 @@ public class Entropy {
         double[][] result = pairsFrequencies(x, y);
 
         // computing local joint entropies
-        result[0][0] = -MathUtils.log2(result[0][0]);
-        result[0][1] = -MathUtils.log2(result[0][1]);
-        result[1][0] = -MathUtils.log2(result[1][0]);
-        result[1][1] = -MathUtils.log2(result[1][1]);
+        result[0][0] = result[0][0] != 0.0 ? -MathUtils.log2(result[0][0]) : 0.0;
+        result[0][1] = result[0][1] != 0.0 ? -MathUtils.log2(result[0][1]) : 0.0;
+        result[1][0] = result[1][0] != 0.0 ? -MathUtils.log2(result[1][0]) : 0.0;
+        result[1][1] = result[1][1] != 0.0 ? -MathUtils.log2(result[1][1]) : 0.0;
 
         return result;
     }
 
-    // calculate relative frequence (for each pair) given two data streams
-    private static double[][] pairsFrequencies(int[] x, int[] y) {
+    // calculate global conditional entropy given two data streams
+    public static double globalConditionalEntropy(int[] x, int[] y) {
 
+        return globalJointEntropy(x, y) - globalEntropy(x);
+    }
+
+    // calculate local conditional entropy given two data streams
+    public static double[][] localConditionalEntropy(int[] x, int[] y) {
+
+        double[][] result = new double[2][2];
+        double[][] lje = localJointEntropy(x, y);
+
+        // computing frequencies
+        result[0][0] = lje[0][0] - localEntropy(y, 0);
+        result[0][1] = lje[0][1] - localEntropy(y, 1);
+        result[1][0] = lje[1][0] - localEntropy(y, 0);
+        result[1][1] = lje[1][1] - localEntropy(y, 1);
+
+        return result;
+    }
+
+    //
+    // calculate single value occurrences in a stream
+    public static double[] valuesFrequencies(int[] x) {
+
+        double[] result = new double[2];
+
+        for (int i = 0; i < x.length; i++) {
+            result[x[i]] += x[i];
+        }
+        return result;
+    }
+
+    // calculate relative frequencies (for each pair) given two data streams
+    private static double[][] pairsFrequencies(int[] x, int[] y) {
+        
         double[][] result = new double[2][2];
         int n = x.length;
 
@@ -85,5 +118,4 @@ public class Entropy {
 
         return result;
     }
-
 }
