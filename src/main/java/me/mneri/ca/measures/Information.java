@@ -12,7 +12,7 @@ public class Information {
     public static double[][] localMutualInformation(int[] x, int[] y) {
         
         double[][] result = new double[2][2];
-        double[][] lce = Entropy.localConditionalEntropy(x, y);
+        double[][] lce = Entropy.localJointEntropy(x, y);
 
         // computing local mutual informations
         result[0][0] = Entropy.localEntropy(x, 0) + Entropy.localEntropy(y, 0) - lce[0][0];

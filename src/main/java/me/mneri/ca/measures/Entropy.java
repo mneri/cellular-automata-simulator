@@ -14,7 +14,7 @@ public class Entropy {
         double fone = ones / states.length;
         double fzero = 1 - fone;
         if (fone == 0.0 || fzero == 0.0)
-            return 0;
+            return 0.0;
 
         return -(fone * MathUtils.log2(fone) + fzero * MathUtils.log2(fzero));
     }
@@ -46,7 +46,7 @@ public class Entropy {
             }
             double fval = mVal / states.length;
 
-            return fval!=0.0?-MathUtils.log2(fval):0.0;
+            return fval != 0.0 ? -MathUtils.log2(fval) : 0.0;
 
         } else
             throw new IllegalArgumentException("Value must be 1 or 0");
@@ -79,31 +79,38 @@ public class Entropy {
         double[][] lje = localJointEntropy(x, y);
 
         // computing frequencies
-        result[0][0] = lje[0][0] - localEntropy(y, 0);
-        result[0][1] = lje[0][1] - localEntropy(y, 1);
-        result[1][0] = lje[1][0] - localEntropy(y, 0);
-        result[1][1] = lje[1][1] - localEntropy(y, 1);
+        result[0][0] = lje[0][0] - localEntropy(x, 0);
+        result[0][1] = lje[0][1] - localEntropy(x, 0);
+        result[1][0] = lje[1][0] - localEntropy(x, 1);
+        result[1][1] = lje[1][1] - localEntropy(x, 1);
 
         return result;
     }
 
-    //
     // calculate single value occurrences in a stream
     public static double[] valuesFrequencies(int[] x) {
 
         double[] result = new double[2];
 
         for (int i = 0; i < x.length; i++) {
-            result[x[i]] += x[i];
+            result[x[i]]++;
         }
+
+        // computing frequencies
+        result[0] /= x.length;
+        result[1] /= x.length;
+
         return result;
     }
 
     // calculate relative frequencies (for each pair) given two data streams
     private static double[][] pairsFrequencies(int[] x, int[] y) {
-        
+
+        if (x.length != y.length)
+            throw new IllegalArgumentException("The two arrays must have the same length");
+
         double[][] result = new double[2][2];
-        int n = x.length;
+        int n = x.length; // Note: x.length is equal to y.length
 
         // count pairs occurrences: (0,0) , (0,1) , (1,0) , (1,1)
         for (int i = 0; i < n; i++) {

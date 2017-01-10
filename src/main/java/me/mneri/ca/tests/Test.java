@@ -7,8 +7,8 @@ public class Test {
 
     public static void main(String[] args) {
 
-        int[] streamX = new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
-        int[] streamY = new int[] { 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+        int[] streamX = new int[] { 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1 };
+        int[] streamY = new int[] { 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0 };
         int[] streamZ = new int[] { 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1 };
 
         // Lizier Entropy calculators
