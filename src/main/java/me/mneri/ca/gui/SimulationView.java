@@ -120,7 +120,6 @@ public class SimulationView extends JFrame {
 
     private void init() {
         setTitle("Cellular Automaton Simulator");
-        setResizable(false);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 }
