@@ -72,11 +72,11 @@ public class SettingsView extends JFrame {
         return panel;
     }
 
-    public ColorPreviewTextField getBackgroundColorField() {
+    ColorPreviewTextField getBackgroundColorField() {
         return mBackgroundField;
     }
 
-    public JComboBox<String> getIterationsComboBox() {
+    JComboBox<String> getIterationsComboBox() {
         return mIterationsComboBox;
     }
 

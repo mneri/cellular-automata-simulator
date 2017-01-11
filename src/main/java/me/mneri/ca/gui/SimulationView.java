@@ -82,39 +82,39 @@ public class SimulationView extends JFrame {
         toolBar.add(mSettingsButton);
     }
 
-    public JButton getOpenButton() {
+    JButton getOpenButton() {
         return mOpenButton;
     }
 
-    public JButton getPlayButton() {
+    JButton getPlayButton() {
         return mPlayButton;
     }
 
-    public JButton getSettingsButton() {
+    JButton getSettingsButton() {
         return mSettingsButton;
     }
 
-    public SimulationPanel getSimulationPanel() {
+    SimulationPanel getSimulationPanel() {
         return mSimulationPanel;
     }
 
-    public JLabel getStatusLabel() {
+    JLabel getStatusLabel() {
         return mStatusLabel;
     }
 
-    public JButton getStepButton() {
+    JButton getStepButton() {
         return mStepButton;
     }
 
-    public JButton getZoomInButton() {
+    JButton getZoomInButton() {
         return mZoomInButton;
     }
 
-    public JButton getZoomOriginalButton() {
+    JButton getZoomOriginalButton() {
         return mZoomOriginalButton;
     }
 
-    public JButton getmZoomOutButton() {
+    JButton getmZoomOutButton() {
         return mZoomOutButton;
     }
 
