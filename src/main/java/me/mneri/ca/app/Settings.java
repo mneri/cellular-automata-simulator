@@ -45,6 +45,17 @@ public class Settings {
         return "1";
     }
 
+    public Point getLocation() {
+        try {
+            int x = Integer.valueOf(mProps.getProperty("location_x"));
+            int y = Integer.valueOf(mProps.getProperty("location_y"));
+
+            return new Point(x, y);
+        } catch (Exception ignored) {
+            return null;
+        }
+    }
+
     private void init() {
         try {
             mProps = new Properties(mProps);
@@ -71,6 +82,15 @@ public class Settings {
 
     public void setIterations(String iterations) {
 
+    }
+
+    public void setLocation(Point point) {
+        setLocation(point.x, point.y);
+    }
+
+    public void setLocation(int x, int y) {
+        setAndStore("location_x", Integer.toString(x));
+        setAndStore("location_y", Integer.toString(y));
     }
 
     private void setAndStore(String name, String value) {

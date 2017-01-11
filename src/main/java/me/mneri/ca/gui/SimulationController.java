@@ -39,6 +39,12 @@ public class SimulationController {
     }
 
     private void attachViewCallbacks() {
+        mView.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentMoved(ComponentEvent componentEvent) {
+                Application.instance().getSettings().setLocation(mView.getX(), mView.getY());
+            }
+        });
         mView.getPlayButton().addActionListener((ActionEvent e) -> Application.invokeLater(() -> {
             JButton playButton = mView.getPlayButton();
             IconFactory icons = IconFactory.instance();
@@ -100,6 +106,13 @@ public class SimulationController {
     private void init() {
         Settings settings = Application.instance().getSettings();
 
+        Point point = settings.getLocation();
+
+        if (point != null)
+            mView.setLocation(point.x, point.y);
+        else
+            mView.setLocationRelativeTo(mParentView);
+
         SimulationPanel simPanel = mView.getSimulationPanel();
         simPanel.setBackgroundColor(settings.getBackgroundColor());
         simPanel.setDiagram(mModel.getDiagram());
@@ -109,7 +122,6 @@ public class SimulationController {
     }
 
     public void showView() {
-        mView.setLocationRelativeTo(mParentView);
         mView.setVisible(true);
     }
 }
