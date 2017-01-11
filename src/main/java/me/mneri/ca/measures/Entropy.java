@@ -87,6 +87,62 @@ public class Entropy {
         return result;
     }
 
+    // calculate local conditional entropy given two data streams
+    public static double[][] localEntropyRate(int[][] matrix, int k) {
+
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+
+        double[][] result = new double[rows][cols];
+        double[][] histOcc = new double[2][(int) Math.pow(2, k)];
+
+        int observations = (rows - k) * cols;
+
+        for (int i = 0; i < cols; i++) {
+            for (int h = 0; h < rows - k - 1; h++) {
+
+                int dec = 0;
+
+                // calculate decimal representation of history slot
+                int j;
+                for (j = h; j < h + k; j++) {
+                    dec *= 2;
+                    dec += matrix[j][i];
+                }
+
+                // update occurrences
+                histOcc[matrix[j][i]][dec]++;
+
+            }
+        }
+
+        for (int i = 0; i < cols; i++) {
+            for (int h = 0; h < rows - k - 1; h++) {
+
+                int dec = 0;
+                double pxy;
+                double py;
+
+                // calculate decimal representation of history slot
+                int j;
+                for (j = h; j < h + k; j++) {
+                    dec *= 2;
+                    dec += matrix[j][i];
+                }
+
+                // calculate frequencies
+                pxy = histOcc[matrix[j][i]][dec] / (histOcc[0][dec] + histOcc[1][dec]);
+                py = (histOcc[0][dec] + histOcc[1][dec]) / observations;
+
+                // update the cell
+                result[j][i] = -MathUtils.log2(pxy / py);
+
+            }
+        }
+
+        return result;
+    }
+
     // calculate single value occurrences in a stream
     public static double[] valuesFrequencies(int[] x) {
 

@@ -1,6 +1,7 @@
 package me.mneri.ca.tests;
 
 import infodynamics.measures.discrete.EntropyCalculatorDiscrete;
+import infodynamics.measures.discrete.EntropyRateCalculatorDiscrete;
 import me.mneri.ca.measures.Entropy;
 
 public class Test {
@@ -11,6 +12,31 @@ public class Test {
         int[] streamY = new int[] { 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0 };
         int[] streamZ = new int[] { 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1 };
 
+        int[] col1 = new int[] { 1, 1, 0, 0 };
+        int[] col2 = new int[] { 1, 1, 1, 1 };
+
+        // Lizier Entropy calculators
+        EntropyRateCalculatorDiscrete erCalc = new EntropyRateCalculatorDiscrete(2, 2);
+        erCalc.addObservations(col1);
+        erCalc.addObservations(col2);
+        double[] c1 = erCalc.computeLocalFromPreviousObservations(col1);
+        double[] c2 = erCalc.computeLocalFromPreviousObservations(col2);
+        
+        double[][] erRes = Entropy.localEntropyRate(new int[][]{{1,1},{1,1},{0,1},{0,1}}, 2);
+        
+     // local entropy rate
+        System.out.printf("(Our) Local Entropy Rate: \n");
+        for (int i = 0; i < erRes.length; i++) {
+            for (int j = 0; j < erRes[0].length; j++) {
+                System.out.printf(" ->(%d,%d): %f \n", i, j,erRes[i][j]);
+            }
+        }
+        //Lizier entropy rate
+        System.out.printf("Lizier Local Entropy Rate: \n");
+        for (int i = 0; i < col1.length; i++) {
+            System.out.printf(" ->(col1,%d): %f \n",i,c1[i]);
+            System.out.printf(" ->(col2,%d): %f \n",i,c2[i]);
+        }
         // Lizier Entropy calculators
         EntropyCalculatorDiscrete eCalc = new EntropyCalculatorDiscrete(2);
 
@@ -25,6 +51,8 @@ public class Test {
         System.out.printf(" ->(0,1): %f \n", res[0][1]);
         System.out.printf(" ->(1,0): %f \n", res[1][0]);
         System.out.printf(" ->(1,1): %f \n", res[1][1]);
+        
+        
 
         System.out.printf("------------------- OLD ------------------- \n", Entropy.globalEntropy(streamX));
 
