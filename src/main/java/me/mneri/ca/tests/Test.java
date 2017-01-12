@@ -12,7 +12,6 @@ public class Test {
 
         int[] streamX = new int[] { 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1 };
         int[] streamY = new int[] { 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0 };
-        int[] streamZ = new int[] { 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1 };
 
         int[] col1 = new int[] { 1, 1, 0, 0 };
         int[] col2 = new int[] { 1, 1, 1, 1 };
