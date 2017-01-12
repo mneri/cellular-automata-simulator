@@ -1,4 +1,4 @@
-package me.mneri.ca.event;
+package me.mneri.ca.adapter;
 
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;

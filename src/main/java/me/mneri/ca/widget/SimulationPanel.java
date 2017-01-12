@@ -1,9 +1,15 @@
 package me.mneri.ca.widget;
 
+import me.mneri.ca.adapter.AncestorAdapter;
 import me.mneri.ca.drawable.SpaceTimeDiagram;
 
 import javax.swing.*;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.HierarchyEvent;
+import java.awt.event.HierarchyListener;
 import java.util.Set;
 
 import static java.awt.RenderingHints.KEY_TEXT_ANTIALIASING;
@@ -24,6 +30,10 @@ public class SimulationPanel extends JPanel {
     private double mScale = SCALE_DEFAULT;
     private double mScaleFactor = SCALE_FACTOR;
 
+    public SimulationPanel() {
+        init();
+    }
+
     public boolean canZoomIn() {
         return mScale * mScaleFactor < SCALE_MAX;
     }
@@ -34,6 +44,16 @@ public class SimulationPanel extends JPanel {
 
     public boolean canZoomOut() {
         return mScale / mScaleFactor > SCALE_MIN;
+    }
+
+    private void init() {
+        addAncestorListener(new AncestorAdapter() {
+            @Override
+            public void ancestorAdded(AncestorEvent ancestorEvent) {
+                int gridWidth = (int) Math.ceil(getWidth() / mScale);
+                mScrollX = -gridWidth / 2;
+            }
+        });
     }
 
     @Override

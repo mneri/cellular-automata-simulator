@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import javax.swing.event.DocumentEvent;
 
-import me.mneri.ca.event.DocumentListenerAdapter;
+import me.mneri.ca.adapter.DocumentListenerAdapter;
 import me.mneri.ca.util.Colors;
 
 public class ColorPreviewTextField extends IconTextField {
