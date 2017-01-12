@@ -114,7 +114,7 @@ public class SimulationView extends JFrame {
         return mZoomOriginalButton;
     }
 
-    JButton getmZoomOutButton() {
+    JButton getZoomOutButton() {
         return mZoomOutButton;
     }
 

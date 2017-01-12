@@ -85,9 +85,18 @@ public class SimulationController {
                 mLastDragY = y;
             }
         });
-        mView.getZoomInButton().addActionListener((ActionEvent e) -> mView.getSimulationPanel().zoomIn());
-        mView.getZoomOriginalButton().addActionListener((ActionEvent e) -> mView.getSimulationPanel().zoomOriginal());
-        mView.getmZoomOutButton().addActionListener((ActionEvent e) -> mView.getSimulationPanel().zoomOut());
+        mView.getZoomInButton().addActionListener((ActionEvent e) -> {
+            mView.getSimulationPanel().zoomIn();
+            updateZoomButtons();
+        });
+        mView.getZoomOriginalButton().addActionListener((ActionEvent e) -> {
+            mView.getSimulationPanel().zoomOriginal();
+            updateZoomButtons();
+        });
+        mView.getZoomOutButton().addActionListener((ActionEvent e) -> {
+            mView.getSimulationPanel().zoomOut();
+            updateZoomButtons();
+        });
     }
 
     public static SimulationController createMVC() {
@@ -117,11 +126,21 @@ public class SimulationController {
         simPanel.setBackgroundColor(settings.getBackgroundColor());
         simPanel.setDiagram(mModel.getDiagram());
 
+        updateZoomButtons();
+
         JLabel statusLabel = mView.getStatusLabel();
         statusLabel.setText(" ");
     }
 
     public void showView() {
         mView.setVisible(true);
+    }
+
+    private void updateZoomButtons() {
+        SimulationPanel simPanel = mView.getSimulationPanel();
+
+        mView.getZoomInButton().setEnabled(simPanel.canZoomIn());
+        mView.getZoomOriginalButton().setEnabled(simPanel.canZoomOriginal());
+        mView.getZoomOutButton().setEnabled(simPanel.canZoomOut());
     }
 }

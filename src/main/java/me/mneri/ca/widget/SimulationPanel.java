@@ -22,7 +22,19 @@ public class SimulationPanel extends JPanel {
     private double mScrollX;
     private double mScrollY;
     private double mScale = SCALE_DEFAULT;
-    private double mZoomFactor = SCALE_FACTOR;
+    private double mScaleFactor = SCALE_FACTOR;
+
+    public boolean canZoomIn() {
+        return mScale * mScaleFactor < SCALE_MAX;
+    }
+
+    public boolean canZoomOriginal() {
+        return mScale != SCALE_DEFAULT;
+    }
+
+    public boolean canZoomOut() {
+        return mScale / mScaleFactor > SCALE_MIN;
+    }
 
     @Override
     protected void paintComponent(Graphics graphics) {
@@ -95,7 +107,7 @@ public class SimulationPanel extends JPanel {
     }
 
     public void zoomIn() {
-        setScale(mScale * mZoomFactor);
+        setScale(mScale * mScaleFactor);
     }
 
     public void zoomOriginal() {
@@ -103,6 +115,6 @@ public class SimulationPanel extends JPanel {
     }
 
     public void zoomOut() {
-        setScale(mScale / mZoomFactor);
+        setScale(mScale / mScaleFactor);
     }
 }
