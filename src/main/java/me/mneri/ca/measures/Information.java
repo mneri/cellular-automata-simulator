@@ -9,30 +9,30 @@ public class Information {
     }
 
     // calculate local mutual information given two data streams
-    public static double[][] localMutualInformation(int[] x, int[] y) {
-        
-        double[][] result = new double[2][2];
-        double[][] lce = Entropy.localJointEntropy(x, y);
+    public static double[] localMutualInformation(int[] x, int[] y) {
+
+        double[] result = new double[x.length];
+        double[] lce = Entropy.localJointEntropy(x, y);
+        double[] lex = Entropy.localEntropy(x);
+        double[] ley = Entropy.localEntropy(y);
 
         // computing local mutual informations
-        result[0][0] = Entropy.localEntropy(x, 0) + Entropy.localEntropy(y, 0) - lce[0][0];
-        result[0][1] = Entropy.localEntropy(x, 0) + Entropy.localEntropy(y, 1) - lce[0][1];
-        result[1][0] = Entropy.localEntropy(x, 1) + Entropy.localEntropy(y, 0) - lce[1][0];
-        result[1][1] = Entropy.localEntropy(x, 1) + Entropy.localEntropy(y, 1) - lce[1][1];
+        for (int i = 0; i < result.length; i++)
+            result[i] = lex[i] + ley[i] - lce[i];
 
         return result;
     }
 
     // calculate global mutual information given two data streams
     public static double globalConditionalMutualInformation(int[] x, int[] y, int[] z) {
-       
+
         // TODO
         return 0.0;
     }
 
     // calculate local conditional mutual information given two data streams
     public static double localConditionalMutualInformation(int[] x, int y, int[] z) {
-        
+
         // TODO
         return 0.0;
     }

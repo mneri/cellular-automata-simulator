@@ -23,47 +23,55 @@ public class Entropy {
     public static double globalJointEntropy(int[] x, int[] y) {
 
         double[][] freqs = pairsFrequencies(x, y);
-        double[][] ljes = localJointEntropy(x, y);
+        double[] ljes = localJointEntropy(x, y);
         double res = 0.0;
 
         // averaged sum over local joint entropies
-        for (int i = 0; i < 2; i++)
-            for (int j = 0; j < 2; j++)
-                res += (ljes[i][j] * freqs[i][j]);
+        for (int i = 0; i < x.length; i++)
+            res += (ljes[i] * freqs[x[i]][y[i]]);
 
         return res;
     }
 
     // calculate local entropy in a binary data stream for given value
-    public static double localEntropy(int[] states, int value) {
+    public static double[] localEntropy(int[] states) {
 
-        if (value == 0 || value == 1) {
+        double countOnes = 0.0;
+        double result[] = new double[states.length];
 
-            float mVal = 0;
-            for (int i = 0; i < states.length; i++) {
-                if (states[i] == value)
-                    mVal++;
-            }
-            double fval = mVal / states.length;
+        for (int i = 0; i < states.length; i++) {
+            countOnes += states[i];
+        }
 
-            return fval != 0.0 ? -MathUtils.log2(fval) : 0.0;
+        // compute frequencies array
+        double[] freqs = new double[2];
+        freqs[1] = countOnes / (double)states.length;
+        freqs[0] = 1.0 - freqs[1];
 
-        } else
-            throw new IllegalArgumentException("Value must be 1 or 0");
+        for (int i = 0; i < result.length; i++) {
+            result[i] = -MathUtils.log2(freqs[states[i]]);
+        }
+
+        return result;
     }
 
     // calculate local joint entropy given two data streams
-    public static double[][] localJointEntropy(int[] x, int[] y) {
+    public static double[] localJointEntropy(int[] x, int[] y) {
 
-        double[][] result = pairsFrequencies(x, y);
+        double[][] freqs = pairsFrequencies(x, y);
+        double[] res = new double[x.length];
 
         // computing local joint entropies
-        result[0][0] = result[0][0] != 0.0 ? -MathUtils.log2(result[0][0]) : 0.0;
-        result[0][1] = result[0][1] != 0.0 ? -MathUtils.log2(result[0][1]) : 0.0;
-        result[1][0] = result[1][0] != 0.0 ? -MathUtils.log2(result[1][0]) : 0.0;
-        result[1][1] = result[1][1] != 0.0 ? -MathUtils.log2(result[1][1]) : 0.0;
+        freqs[0][0] = -MathUtils.log2(freqs[0][0]);
+        freqs[0][1] = -MathUtils.log2(freqs[0][1]);
+        freqs[1][0] = -MathUtils.log2(freqs[1][0]);
+        freqs[1][1] = -MathUtils.log2(freqs[1][1]);
 
-        return result;
+        for (int i = 0; i < res.length; i++) {
+            res[i] = freqs[x[i]][y[i]];
+        }
+
+        return res;
     }
 
     // calculate global conditional entropy given two data streams
@@ -73,16 +81,15 @@ public class Entropy {
     }
 
     // calculate local conditional entropy given two data streams
-    public static double[][] localConditionalEntropy(int[] x, int[] y) {
+    public static double[] localConditionalEntropy(int[] x, int[] y) {
 
-        double[][] result = new double[2][2];
-        double[][] lje = localJointEntropy(x, y);
+        double[] result = new double[x.length];
+        double[] lje = localJointEntropy(x, y);
+        double[] lex = localEntropy(x);
 
         // computing frequencies
-        result[0][0] = lje[0][0] - localEntropy(x, 0);
-        result[0][1] = lje[0][1] - localEntropy(x, 0);
-        result[1][0] = lje[1][0] - localEntropy(x, 1);
-        result[1][1] = lje[1][1] - localEntropy(x, 1);
+        for (int i = 0; i < result.length; i++)
+            result[i] = lje[i] - lex[i];
 
         return result;
     }
