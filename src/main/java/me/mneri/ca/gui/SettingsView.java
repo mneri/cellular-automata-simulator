@@ -6,12 +6,17 @@ import javax.swing.*;
 import javax.swing.border.Border;
 
 import me.mneri.ca.widget.ColorPreviewTextField;
+import me.mneri.ca.widget.GradientPreview;
 
 public class SettingsView extends JFrame {
     private static final int FRAME_WIDTH = 340;
     private static final int PADDING = 4;
 
+    private ColorPreviewTextField mColorHighField;
+    private ColorPreviewTextField mColorLowField;
     private ColorPreviewTextField mBackgroundField;
+    private GradientPreview mGradientPreview;
+    private JComboBox<String> mInterpolatorComboBox;
     private JComboBox<String> mIterationsComboBox;
 
     public SettingsView() {
@@ -69,11 +74,47 @@ public class SettingsView extends JFrame {
         panel.add(backgroundLabel);
         panel.add(mBackgroundField);
 
+        JLabel highColorLabel = new JLabel("Cell Color High");
+        mColorHighField = new ColorPreviewTextField();
+        panel.add(highColorLabel);
+        panel.add(mColorHighField);
+
+        JLabel lowColorLabel = new JLabel("Cell Color Low");
+        mColorLowField = new ColorPreviewTextField();
+        panel.add(lowColorLabel);
+        panel.add(mColorLowField);
+
+        JLabel interpolatorLabel = new JLabel("Cell Color Interpolator");
+        mInterpolatorComboBox = new JComboBox<>();
+        panel.add(interpolatorLabel);
+        panel.add(mInterpolatorComboBox);
+
+        JLabel gradientLabel = new JLabel("Cell Gradient Preview");
+        mGradientPreview = new GradientPreview();
+        panel.add(gradientLabel);
+        panel.add(mGradientPreview);
+
         return panel;
     }
 
     ColorPreviewTextField getBackgroundColorField() {
         return mBackgroundField;
+    }
+
+    ColorPreviewTextField getCellColorHighField() {
+        return mColorHighField;
+    }
+
+    ColorPreviewTextField getCellColorLowField() {
+        return mColorLowField;
+    }
+
+    GradientPreview getGradientPreview() {
+        return mGradientPreview;
+    }
+
+    JComboBox<String> getInterpolatorComboBox() {
+        return mInterpolatorComboBox;
     }
 
     JComboBox<String> getIterationsComboBox() {

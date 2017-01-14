@@ -14,9 +14,6 @@ import static java.awt.RenderingHints.VALUE_TEXT_ANTIALIAS_ON;
 
 public class SimulationPanel extends JPanel {
     private static final Color CELL_COLOR = Color.decode("#cdcdcd");
-    private static final Color GRADIENT_END = Color.decode("#ff6d00");
-    private static final int GRADIENT_LEN = 255;
-    private static final Color GRADIENT_START = Color.decode("#64dd17");
     private static final RenderingHints HINTS = new RenderingHints(KEY_TEXT_ANTIALIASING, VALUE_TEXT_ANTIALIAS_ON);
     private static final double SCALE_FACTOR = 1.2d;
     private static final double SCALE_DEFAULT = 4.0d;
@@ -25,7 +22,6 @@ public class SimulationPanel extends JPanel {
 
     private Color mBackgroundColor;
     private SpaceTimeDiagram mDiagram;
-    private Color[] mGradient = Colors.linearGradient(GRADIENT_START, GRADIENT_END, GRADIENT_LEN);
     private double mScrollX;
     private double mScrollY;
     private double mScale = SCALE_DEFAULT;
