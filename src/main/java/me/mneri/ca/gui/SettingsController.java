@@ -1,5 +1,8 @@
 package me.mneri.ca.gui;
 
+import me.mneri.ca.interpolator.Interpolator;
+import me.mneri.ca.interpolator.InterpolatorFactory;
+import me.mneri.ca.interpolator.LinearInterpolator;
 import me.mneri.ca.util.Colors;
 
 import java.awt.*;
@@ -24,7 +27,9 @@ public class SettingsController {
     }
 
     private void attachModelCallbacks() {
-
+        mModel.addListener(() -> {
+            updateGradientPreview();
+        });
     }
 
     private void attachViewCallbacks() {
@@ -33,7 +38,7 @@ public class SettingsController {
         mView.getCellColorLowField().addColorListener((Color color) -> mModel.setCellColorLow(color));
         mView.getInterpolatorComboBox().addActionListener((ActionEvent e) -> {
             String selected = (String) mView.getInterpolatorComboBox().getSelectedItem();
-            //mModel.setInterpolator(selected);
+            mModel.setInterpolator(selected);
         });
         mView.getIterationsComboBox().addActionListener((ActionEvent e) -> {
             String selected = (String) mView.getIterationsComboBox().getSelectedItem();
@@ -58,6 +63,9 @@ public class SettingsController {
         mView.getBackgroundColorField().setColor(mModel.getBackgroundColor());
         mView.getCellColorHighField().setColor(mModel.getCellColorHigh());
         mView.getCellColorLowField().setColor(mModel.getCellColorLow());
+        JComboBox<String> interpolatorCombo = mView.getInterpolatorComboBox();
+        interpolatorCombo.setModel(new DefaultComboBoxModel<>(new InterpolatorFactory().enumerate()));
+        interpolatorCombo.setSelectedItem(mModel.getInterpolator());
         updateGradientPreview();
 
         JComboBox<String> iterationsCombo = mView.getIterationsComboBox();
@@ -73,6 +81,7 @@ public class SettingsController {
     private void updateGradientPreview() {
         Color start = mModel.getCellColorHigh();
         Color end = mModel.getCellColorLow();
-        mView.getGradientPreview().setGradient(Colors.createHsbGradient(start, end, null, 20));
+        Interpolator inter = mModel.getInterpolator();
+        mView.getGradientPreview().setGradient(Colors.createHsbGradient(start, end, inter, 20));
     }
 }

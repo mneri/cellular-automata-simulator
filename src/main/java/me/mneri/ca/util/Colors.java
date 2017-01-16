@@ -3,6 +3,7 @@ package me.mneri.ca.util;
 import me.mneri.ca.interpolator.Interpolator;
 
 import java.awt.*;
+import java.util.Arrays;
 
 public class Colors {
     public static Color fromHsbArray(float[] hsb) {
@@ -13,19 +14,19 @@ public class Colors {
         return new Color(rgb[0], rgb[1], rgb[2]);
     }
 
-    public static void createHsbGradient(Color start, Color end, Interpolator interpolator, Color[] out) {
+    public static void createHsbGradient(Color start, Color end, Interpolator inter, Color[] out) {
         float[] startHsb = toHsbArray(start);
         float[] endHsb = toHsbArray(end);
-        float[] stepHsb = new float[3];
+        float[] diffHsb = new float[3];
 
         for (int i = 0; i < 3; i++)
-            stepHsb[i] = (endHsb[i] - startHsb[i]) / (out.length - 1);
-
-        float[] hsb = new float[3];
+            diffHsb[i] = endHsb[i] - startHsb[i];
 
         for (int i = 0; i < out.length; i++) {
+            float[] hsb = new float[3];
+
             for (int j = 0; j < 3; j++)
-                hsb[j] = (startHsb[j] + stepHsb[j] * i);
+                hsb[j] = startHsb[j] + diffHsb[j] * inter.get(((float) i) / out.length);
 
             out[i] = fromHsbArray(hsb);
         }

@@ -8,16 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SimulationModel {
-    public interface ModelListener {
+    public interface Listener {
         void onUpdate();
     }
 
     private Automaton mAutomaton = Automaton.canonical(new Rule30());
     private SpaceTimeDiagram mDiagram = new SpaceTimeDiagram(mAutomaton);
-    private List<ModelListener> mListeners = new ArrayList<>();
+    private List<Listener> mListeners = new ArrayList<>();
     private boolean mRunning;
 
-    public void addModelListener(ModelListener listener) {
+    public void addListener(Listener listener) {
         mListeners.add(listener);
     }
 
@@ -30,7 +30,7 @@ public class SimulationModel {
     }
 
     private void notifyListeners() {
-        for (ModelListener listener : mListeners)
+        for (Listener listener : mListeners)
             listener.onUpdate();
     }
 

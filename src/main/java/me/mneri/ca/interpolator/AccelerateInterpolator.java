@@ -14,10 +14,15 @@ public class AccelerateInterpolator implements Interpolator {
     }
 
     @Override
-    public float interpolation(float input) {
+    public float get(float input) {
         if (mFactor == 1.0f)
             return input * input;
         else
             return (float) Math.pow(input, mDoubleFactor);
+    }
+
+    @Override
+    public String toString() {
+        return "Accelerate Interpolator";
     }
 }

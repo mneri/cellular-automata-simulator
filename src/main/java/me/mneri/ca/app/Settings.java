@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 import me.mneri.ca.interpolator.Interpolator;
+import me.mneri.ca.interpolator.LinearInterpolator;
 import me.mneri.ca.util.Colors;
 import me.mneri.ca.util.Fs;
 
@@ -62,6 +63,10 @@ public class Settings {
         return color;
     }
 
+    public String getInterpolator() {
+        return mProps.getProperty("cell_gradient_interpolator");
+    }
+
     public String getIterations() {
         return "1";
     }
@@ -109,7 +114,7 @@ public class Settings {
         setAndStore("cell_color_low", Colors.toHexString(color));
     }
 
-    public void setInterpolator(Interpolator interpolator) {
+    public void setInterpolator(String interpolator) {
         setAndStore("cell_gradient_interpolator", interpolator.toString());
     }
 

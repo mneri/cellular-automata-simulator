@@ -12,11 +12,16 @@ public class DecelerateInterpolator implements Interpolator {
     }
 
     @Override
-    public float interpolation(float input) {
+    public float get(float input) {
         if (mFactor == 1.0f) {
             return (1.0f - (1.0f - input) * (1.0f - input));
         } else {
             return (1.0f - (float) Math.pow((1.0f - input), 2 * mFactor));
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Decelerate Interpolator";
     }
 }

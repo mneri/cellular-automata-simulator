@@ -27,7 +27,7 @@ public class SimulationController {
     }
 
     private void attachModelCallbacks() {
-        mModel.addModelListener(() -> mView.getSimulationPanel().repaint());
+        mModel.addListener(() -> mView.getSimulationPanel().repaint());
     }
 
     private void attachSettingsCallbacks() {
