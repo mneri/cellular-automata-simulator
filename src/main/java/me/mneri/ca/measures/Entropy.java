@@ -19,20 +19,6 @@ public class Entropy {
         return -(fone * MathUtils.log2(fone) + fzero * MathUtils.log2(fzero));
     }
 
-    // calculate global joint entropy given two data streams
-    public static double globalJointEntropy(int[] x, int[] y) {
-
-        double[][] freqs = pairsFrequencies(x, y);
-        double[] ljes = localJointEntropy(x, y);
-        double res = 0.0;
-
-        // averaged sum over local joint entropies
-        for (int i = 0; i < x.length; i++)
-            res += (ljes[i] * freqs[x[i]][y[i]]);
-
-        return res;
-    }
-
     // calculate local entropy in a binary data stream for given value
     public static double[] localEntropy(int[] states) {
 
@@ -45,7 +31,7 @@ public class Entropy {
 
         // compute frequencies array
         double[] freqs = new double[2];
-        freqs[1] = countOnes / (double)states.length;
+        freqs[1] = countOnes / (double) states.length;
         freqs[0] = 1.0 - freqs[1];
 
         for (int i = 0; i < result.length; i++) {
@@ -53,6 +39,21 @@ public class Entropy {
         }
 
         return result;
+    }
+
+    // calculate global joint entropy given two data streams
+    public static double globalJointEntropy(int[] x, int[] y) {
+
+        double[][] freqs = pairsFrequencies(x, y);
+        double res = 0.0;
+
+        // averaged sum over local joint entropies
+        for (int i = 0; i < 2; i++)
+            for (int j = 0; j < 2; j++)
+                if (freqs[i][j] != 0)
+                    res += (freqs[i][j] * MathUtils.log2(freqs[i][j]));
+
+        return -res;
     }
 
     // calculate local joint entropy given two data streams
@@ -67,9 +68,8 @@ public class Entropy {
         freqs[1][0] = -MathUtils.log2(freqs[1][0]);
         freqs[1][1] = -MathUtils.log2(freqs[1][1]);
 
-        for (int i = 0; i < res.length; i++) {
+        for (int i = 0; i < res.length; i++)
             res[i] = freqs[x[i]][y[i]];
-        }
 
         return res;
     }
@@ -77,7 +77,7 @@ public class Entropy {
     // calculate global conditional entropy given two data streams
     public static double globalConditionalEntropy(int[] x, int[] y) {
 
-        return globalJointEntropy(x, y) - globalEntropy(x);
+        return globalJointEntropy(x, y) - globalEntropy(y);
     }
 
     // calculate local conditional entropy given two data streams
@@ -143,7 +143,6 @@ public class Entropy {
 
                 // update the cell
                 result[j][i] = -MathUtils.log2(pxy / py);
-
             }
         }
 
@@ -167,10 +166,10 @@ public class Entropy {
     }
 
     // calculate relative frequencies (for each pair) given two data streams
-    private static double[][] pairsFrequencies(int[] x, int[] y) {
+    public static double[][] pairsFrequencies(int[] x, int[] y) {
 
         if (x.length != y.length)
-            throw new IllegalArgumentException("The two arrays must have the same length");
+            throw new IllegalArgumentException("The two arrays must have the same length.");
 
         double[][] result = new double[2][2];
         int n = x.length; // Note: x.length is equal to y.length
