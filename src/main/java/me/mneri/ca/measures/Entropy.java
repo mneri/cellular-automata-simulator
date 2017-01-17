@@ -95,7 +95,7 @@ public class Entropy {
     }
 
     // calculate local conditional entropy given two data streams
-    public static double[][] localEntropyRate(int[][] matrix, int k) {
+    public static double[][] entropyRate(int[][] matrix, int k) {
 
         int rows = matrix.length;
         int cols = matrix[0].length;
@@ -106,7 +106,7 @@ public class Entropy {
         int observations = (rows - k) * cols;
 
         for (int i = 0; i < cols; i++) {
-            for (int h = 0; h < rows - k - 1; h++) {
+            for (int h = 0; h < rows - k; h++) {
 
                 int dec = 0;
 
@@ -119,12 +119,11 @@ public class Entropy {
 
                 // update occurrences
                 histOcc[matrix[j][i]][dec]++;
-
             }
         }
 
         for (int i = 0; i < cols; i++) {
-            for (int h = 0; h < rows - k - 1; h++) {
+            for (int h = 0; h < rows - k; h++) {
 
                 int dec = 0;
                 double pxy;
@@ -138,14 +137,13 @@ public class Entropy {
                 }
 
                 // calculate frequencies
-                pxy = histOcc[matrix[j][i]][dec] / (histOcc[0][dec] + histOcc[1][dec]);
+                pxy = histOcc[matrix[j][i]][dec] / observations;
                 py = (histOcc[0][dec] + histOcc[1][dec]) / observations;
 
                 // update the cell
                 result[j][i] = -MathUtils.log2(pxy / py);
             }
         }
-
         return result;
     }
 

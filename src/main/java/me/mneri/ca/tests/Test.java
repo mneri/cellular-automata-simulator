@@ -37,7 +37,7 @@ public class Test {
         double[] c2 = erCalc.computeLocalFromPreviousObservations(col2);
 
         // our local entropy rate
-        double[][] erRes = Entropy.localEntropyRate(new int[][] { { 1, 1 }, { 1, 1 }, { 0, 1 }, { 0, 1 } }, 2);
+        double[][] erRes = Entropy.entropyRate(new int[][] { { 1, 1 }, { 1, 1 }, { 0, 1 }, { 0, 1 } }, 2);
         System.out.printf("(Our) Local Entropy Rate: \n");
         for (int i = 0; i < erRes.length; i++) {
             for (int j = 0; j < erRes[0].length; j++) {

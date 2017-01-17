@@ -19,28 +19,31 @@ public class Test {
     EntropyRateCalculatorDiscrete erCalc;
     EntropyCalculatorDiscrete eCalc;
     MutualInformationCalculatorDiscrete miCalc;
+    int len;
 
     @org.junit.Before
     public void setUp() throws Exception {
 
         // generating random input streams
         Random rand = new Random(); // java.util.Random
-        int len = rand.nextInt(100) + 1;
+        len = rand.nextInt(100) + 1;
 
-         // initialize streams
-         streamY = new int[len];
-         streamX = new int[len];
-        
-         for (int i = 0; i < len; i++) {
-         streamX[i] = rand.nextInt(2);
-         streamY[i] = rand.nextInt(2);
-         }
+        // initialize streams
+        streamY = new int[len];
+        streamX = new int[len];
+
+        for (int i = 0; i < len; i++) {
+            streamX[i] = rand.nextInt(2);
+            streamY[i] = rand.nextInt(2);
+        }
 
         // initializing Lixier's calculators
         erCalc = new EntropyRateCalculatorDiscrete(2, 2);
         eCalc = new EntropyCalculatorDiscrete(2);
         miCalc = new MutualInformationCalculatorDiscrete(2);
         miCalc.addObservations(streamX, streamY);
+        erCalc.addObservations(streamX);
+        erCalc.addObservations(streamY);
     }
 
     @org.junit.Test
@@ -63,10 +66,33 @@ public class Test {
 
     @org.junit.Test
     public void globalMutualInformation() {
-        double res = miCalc.computeAverageLocalOfObservations();
-        double res2 = Information.globalMutualInformation(streamX, streamY);
-
         assertEquals(Information.globalMutualInformation(streamX, streamY), miCalc.computeAverageLocalOfObservations(),
                 0.000001);
+    }
+
+    @org.junit.Test
+    public void entropyRate() {
+        
+        int[][] matrix = new int[len][2];
+        double[][] res = new double[len][2];
+        double[][] resT = new double[2][len];
+
+        // create input matrix
+        for (int i = 0; i < len; i++) {
+            matrix[i][0] = streamX[i];
+            matrix[i][1] = streamY[i];
+        }
+
+        //calculate entropy rate
+        res = Entropy.entropyRate(matrix, 2);
+
+        // transpose result matrix
+        for (int i = 0; i < len; i++) {
+            resT[0][i] = res[i][0];
+            resT[1][i] = res[i][1];
+        }
+
+        assertArrayEquals(resT[0], erCalc.computeLocalFromPreviousObservations(streamX), 0.000001);
+        assertArrayEquals(resT[1], erCalc.computeLocalFromPreviousObservations(streamY), 0.000001);
     }
 }
