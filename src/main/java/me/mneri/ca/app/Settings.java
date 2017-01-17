@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import me.mneri.ca.interpolator.Interpolator;
+import me.mneri.ca.interpolator.LinearInterpolator;
 import me.mneri.ca.util.Colors;
 import me.mneri.ca.util.Fs;
 
@@ -39,6 +41,30 @@ public class Settings {
         } catch (NumberFormatException ignored) { }
 
         return color;
+    }
+
+    public Color getCellColorHigh() {
+        Color color = null;
+
+        try {
+            color = Color.decode(mProps.getProperty("cell_color_high"));
+        } catch (NumberFormatException ignored) { }
+
+        return color;
+    }
+
+    public Color getCellColorLow() {
+        Color color = null;
+
+        try {
+            color = Color.decode(mProps.getProperty("cell_color_low"));
+        } catch (NumberFormatException ignored) { }
+
+        return color;
+    }
+
+    public String getInterpolator() {
+        return mProps.getProperty("cell_gradient_interpolator");
     }
 
     public String getIterations() {
@@ -78,6 +104,18 @@ public class Settings {
 
     public void setBackgroundColor(Color color) {
         setAndStore("background_color", Colors.toHexString(color));
+    }
+
+    public void setCellColorHigh(Color color) {
+        setAndStore("cell_color_high", Colors.toHexString(color));
+    }
+
+    public void setCellColorLow(Color color) {
+        setAndStore("cell_color_low", Colors.toHexString(color));
+    }
+
+    public void setInterpolator(String interpolator) {
+        setAndStore("cell_gradient_interpolator", interpolator.toString());
     }
 
     public void setIterations(String iterations) {
