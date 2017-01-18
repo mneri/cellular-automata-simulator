@@ -1,8 +1,5 @@
 package me.mneri.ca.measures;
 
-import infodynamics.measures.discrete.MutualInformationCalculatorDiscrete;
-import me.mneri.ca.util.MathUtils;
-
 public class Information {
 
     // calculate global mutual information given two data streams

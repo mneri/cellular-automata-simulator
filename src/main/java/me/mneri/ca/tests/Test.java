@@ -1,9 +1,7 @@
 package me.mneri.ca.tests;
 
 import infodynamics.measures.discrete.EntropyRateCalculatorDiscrete;
-import infodynamics.measures.discrete.MutualInformationCalculatorDiscrete;
 import me.mneri.ca.measures.Entropy;
-import me.mneri.ca.measures.Information;
 
 public class Test {
 
@@ -17,17 +15,6 @@ public class Test {
 
         // Lizier calculators
         EntropyRateCalculatorDiscrete erCalc = new EntropyRateCalculatorDiscrete(2, 2);
-        MutualInformationCalculatorDiscrete miCalc = new MutualInformationCalculatorDiscrete(2);
-        miCalc.addObservations(streamX, streamY);
-
-        // mutual info
-        System.out.printf("our global MI, H(X) - H(X|Y): %f   \n",
-                Information.globalMutualInformation(streamX, streamY));
-        System.out.printf("lizier global MI: %f   \n", miCalc.computeAverageLocalOfObservations());
-
-        System.out.printf("\n ---------------------------------\n");
-
-        System.out.printf("our global C E: %f   \n", Entropy.globalConditionalEntropy(streamX, streamY));
 
         // entropy rate
 

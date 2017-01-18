@@ -85,7 +85,7 @@ public class Entropy {
 
         double[] result = new double[x.length];
         double[] lje = localJointEntropy(x, y);
-        double[] lex = localEntropy(x);
+        double[] lex = localEntropy(y);
 
         // computing frequencies
         for (int i = 0; i < result.length; i++)
@@ -147,6 +147,12 @@ public class Entropy {
         return result;
     }
 
+    //calculate excess entropy
+    public static double[][] excessEntropy(int[][] matrix, int k)
+    {
+        return null;
+    }
+    
     // calculate single value occurrences in a stream
     public static double[] valuesFrequencies(int[] x) {
 

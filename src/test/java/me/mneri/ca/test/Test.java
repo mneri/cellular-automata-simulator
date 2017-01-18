@@ -59,6 +59,37 @@ public class Test {
     }
 
     @org.junit.Test
+    public void globalJointEntropy() {
+        assertEquals(Entropy.globalJointEntropy(streamX, streamY) - Entropy.globalEntropy(streamY),
+                Entropy.globalConditionalEntropy(streamX, streamY), 0.000001);
+    }
+    
+    @org.junit.Test
+    public void localJointEntropy() {
+        assertEquals(Entropy.globalJointEntropy(streamX, streamY) - Entropy.globalEntropy(streamY),
+                Entropy.globalConditionalEntropy(streamX, streamY), 0.000001);
+    }
+
+    @org.junit.Test
+    public void globalConditionalEntropy() {
+        assertEquals(Entropy.globalEntropy(streamX) - Entropy.globalConditionalEntropy(streamX, streamY),
+                Entropy.globalEntropy(streamY) - Entropy.globalConditionalEntropy(streamY, streamX), 0.000001);
+    }
+    
+    @org.junit.Test
+    public void localConditionalEntropy() {
+        double[] lce = new double[streamX.length];
+        double[] lje = Entropy.localJointEntropy(streamX, streamY);
+        double[] ley = Entropy.localEntropy(streamY);
+
+        for (int i = 0; i < streamX.length; i++) {
+            lce[i] = lje[i] - ley[i];
+        }
+
+        assertArrayEquals(lce, Entropy.localConditionalEntropy(streamX, streamY), 0.000001);
+    }
+
+    @org.junit.Test
     public void localMutualInformation() throws Exception {
         assertArrayEquals(Information.localMutualInformation(streamX, streamY),
                 miCalc.computeLocalFromPreviousObservations(streamX, streamY), 0.000001);
@@ -72,7 +103,7 @@ public class Test {
 
     @org.junit.Test
     public void entropyRate() {
-        
+
         int[][] matrix = new int[len][2];
         double[][] res = new double[len][2];
         double[][] resT = new double[2][len];
@@ -83,7 +114,7 @@ public class Test {
             matrix[i][1] = streamY[i];
         }
 
-        //calculate entropy rate
+        // calculate entropy rate
         res = Entropy.entropyRate(matrix, 2);
 
         // transpose result matrix
