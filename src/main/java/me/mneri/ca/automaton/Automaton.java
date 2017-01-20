@@ -6,54 +6,47 @@ import java.util.HashSet;
 
 public class Automaton {
     private Rule mRule;
-    private HashSet<Integer> mActive = new HashSet<>();
+    private int[] mState;
 
-    private Automaton(Rule rule) {
+    private Automaton(int size, Rule rule) {
         mRule = rule;
+        mState = new int[size];
     }
 
-    public static Automaton canonical(Rule rule) {
-        Automaton automaton = new Automaton(rule);
-        automaton.mActive.add(0);
+    public static Automaton canonical(int size, Rule rule) {
+        Automaton automaton = new Automaton(size, rule);
+        automaton.mState[size / 2] = 1;
         return automaton;
     }
 
-    private HashSet<Integer> concernedCells(HashSet<Integer> active) {
-        int[] neighbors = new int[mRule.arity()];
-        HashSet<Integer> concerned = new HashSet<>();
-
-        for (Integer cell : active) {
-            concerned.add(cell);
-            mRule.neighborhood(cell, neighbors);
-
-            for (int neighbor : neighbors)
-                concerned.add(neighbor);
-        }
-
-        return concerned;
+    public int getState(int location) {
+        return mState[location];
     }
 
-    public HashSet<Integer> getState() {
-        return mActive;
-    }
-
-    public void update() {
+    public Automaton evolve() {
+        int size = mState.length;
         int arity = mRule.arity();
         int[] neighbors = new int[arity];
-        boolean[] states = new boolean[arity];
-        HashSet<Integer> active = new HashSet<>();
-        HashSet<Integer> concerned = concernedCells(mActive);
+        int[] neighborsState = new int[arity];
+        Automaton evolved = new Automaton(size, mRule);
 
-        for (Integer cell :concerned) {
-            mRule.neighborhood(cell, neighbors);
+        for (int i = 0; i < size; i++) {
+            mRule.neighborhood(i, neighbors);
 
-            for (int i = 0; i < neighbors.length; i++)
-                states[i] = mActive.contains(neighbors[i]);
+            for (int j = 0; j < neighbors.length; j++) {
+                if (neighbors[j] < 0 || neighbors[j] >= size)
+                    neighborsState[j] = 1;
+                else
+                    neighborsState[j] = mState[neighbors[j]];
+            }
 
-            if (mRule.update(states))
-                active.add(cell);
+            evolved.mState[i] = mRule.update(neighborsState);
         }
 
-        mActive = active;
+        return evolved;
+    }
+
+    public int size() {
+        return mState.length;
     }
 }

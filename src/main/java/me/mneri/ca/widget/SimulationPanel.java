@@ -76,10 +76,8 @@ public class SimulationPanel extends JPanel {
         g.setColor(CELL_COLOR);
 
         for (int i = gridTop; i < gridBottom; i++) {
-            Set<Integer> state = mDiagram.getState(i);
-
             for (int j = gridLeft; j < gridRight; j++) {
-                if (state.contains(j)) {
+                if (mDiagram.getState(i, j) == 1) {
                     int x = (int) (j - mScrollX);
                     int y = (int) (i - mScrollY);
 

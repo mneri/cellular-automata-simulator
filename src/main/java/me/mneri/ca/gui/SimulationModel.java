@@ -12,7 +12,7 @@ public class SimulationModel {
         void onUpdate();
     }
 
-    private Automaton mAutomaton = Automaton.canonical(new Rule30());
+    private Automaton mAutomaton = Automaton.canonical(1024, new Rule30());
     private SpaceTimeDiagram mDiagram = new SpaceTimeDiagram(mAutomaton);
     private List<Listener> mListeners = new ArrayList<>();
     private boolean mRunning;
@@ -38,7 +38,9 @@ public class SimulationModel {
         mRunning = true;
 
         (new Thread(() -> {
-            while (mRunning) {
+            int iterations = 500;
+
+            while (iterations-- > 0) {
                 mDiagram.tick();
                 notifyListeners();
             }

@@ -7,22 +7,30 @@ import java.util.Collections;
 import java.util.Set;
 
 public class SpaceTimeDiagram {
-    private Automaton mAutomaton;
-    private ArrayList<Set<Integer>> mStates = new ArrayList<>();
+    private ArrayList<Automaton> mAutomatons = new ArrayList<>();
 
     public SpaceTimeDiagram(Automaton automaton) {
-        mAutomaton = automaton;
+        mAutomatons.add(automaton);
     }
 
     public void tick() {
-        mAutomaton.update();
-        mStates.add(mAutomaton.getState());
+        Automaton last = mAutomatons.get(mAutomatons.size() - 1);
+        Automaton evolved = last.evolve();
+        mAutomatons.add(evolved);
     }
 
-    public Set<Integer> getState(int i) {
-        if (i < 0 || i >= mStates.size())
-            return Collections.emptySet();
+    public int getState(int i, int j) {
+        if (i < 0 || j < 0)
+            return 0;
 
-        return mStates.get(i);
+        if (i >= mAutomatons.size())
+            return 0;
+
+        Automaton automaton = mAutomatons.get(i);
+
+        if (j >= automaton.size())
+            return 0;
+
+        return automaton.getState(j);
     }
 }
