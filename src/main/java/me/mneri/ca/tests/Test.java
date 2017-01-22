@@ -12,31 +12,39 @@ public class Test {
 
         int[] col1 = new int[] { 1, 1, 0, 0 };
         int[] col2 = new int[] { 1, 1, 1, 1 };
-
+        
+        int[][] matrix =new int[][] { { 1, 1 }, { 1, 1 }, { 0, 1 }, { 0, 1 } };
+        
         // Lizier calculators
         EntropyRateCalculatorDiscrete erCalc = new EntropyRateCalculatorDiscrete(2, 2);
+        erCalc.initialise();
 
         // entropy rate
 
         erCalc.addObservations(col1);
         erCalc.addObservations(col2);
+        //erCalc.addObservations(matrix);
         double[] c1 = erCalc.computeLocalFromPreviousObservations(col1);
         double[] c2 = erCalc.computeLocalFromPreviousObservations(col2);
-
+        
+        
+        
+        System.out.printf("(Our) Av. Entropy Rate: %f \n", Entropy.averagedEntropyRate(matrix, 2));
+        System.out.printf("(Lizier) Av. Entropy Rate: %f \n", erCalc.computeAverageLocalOfObservations());
+        
         // our local entropy rate
-        double[][] erRes = Entropy.entropyRate(new int[][] { { 1, 1 }, { 1, 1 }, { 0, 1 }, { 0, 1 } }, 2);
+        double[][] erRes = Entropy.localEntropyRate(matrix, 2);
         System.out.printf("(Our) Local Entropy Rate: \n");
         for (int i = 0; i < erRes.length; i++) {
             for (int j = 0; j < erRes[0].length; j++) {
-                System.out.printf(" ->(%d,%d): %f \n", i, j, erRes[i][j]);
+                System.out.printf(" %f ", erRes[i][j]);
             }
+            System.out.printf("\n");
         }
         // Lizier entropy rate
         System.out.printf("(Lizier) Local Entropy Rate: \n");
         for (int i = 0; i < col1.length; i++)
-            System.out.printf(" ->(col1,%d): %f \n", i, c1[i]);
-        for (int i = 0; i < col1.length; i++)
-            System.out.printf(" ->(col2,%d): %f \n", i, c2[i]);
+            System.out.printf(" %f %f \n",c1[i],c2[i]);
     }
 
 }

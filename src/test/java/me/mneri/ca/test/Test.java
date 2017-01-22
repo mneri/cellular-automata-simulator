@@ -41,6 +41,9 @@ public class Test {
         erCalc = new EntropyRateCalculatorDiscrete(2, 2);
         eCalc = new EntropyCalculatorDiscrete(2);
         miCalc = new MutualInformationCalculatorDiscrete(2);
+        erCalc.initialise();
+        miCalc.initialise();
+        eCalc.initialise();
         miCalc.addObservations(streamX, streamY);
         erCalc.addObservations(streamX);
         erCalc.addObservations(streamY);
@@ -60,24 +63,14 @@ public class Test {
 
     @org.junit.Test
     public void globalJointEntropy() {
-        assertEquals(Entropy.globalJointEntropy(streamX, streamY) - Entropy.globalEntropy(streamY),
-                Entropy.globalConditionalEntropy(streamX, streamY), 0.000001);
-    }
-    
-    @org.junit.Test
-    public void localJointEntropy() {
+        
+        // H(X|Y) = H(X,Y) - H(Y)
         assertEquals(Entropy.globalJointEntropy(streamX, streamY) - Entropy.globalEntropy(streamY),
                 Entropy.globalConditionalEntropy(streamX, streamY), 0.000001);
     }
 
     @org.junit.Test
-    public void globalConditionalEntropy() {
-        assertEquals(Entropy.globalEntropy(streamX) - Entropy.globalConditionalEntropy(streamX, streamY),
-                Entropy.globalEntropy(streamY) - Entropy.globalConditionalEntropy(streamY, streamX), 0.000001);
-    }
-    
-    @org.junit.Test
-    public void localConditionalEntropy() {
+    public void localJointEntropy() {
         double[] lce = new double[streamX.length];
         double[] lje = Entropy.localJointEntropy(streamX, streamY);
         double[] ley = Entropy.localEntropy(streamY);
@@ -85,8 +78,35 @@ public class Test {
         for (int i = 0; i < streamX.length; i++) {
             lce[i] = lje[i] - ley[i];
         }
-
+        
+        // h(x|y) = h(x,y) - h(y)
         assertArrayEquals(lce, Entropy.localConditionalEntropy(streamX, streamY), 0.000001);
+    }
+
+    @org.junit.Test
+    public void globalConditionalEntropy() {
+        
+        // H(X) - H(X|Y) = (Y) - H(Y|X)
+        assertEquals(Entropy.globalEntropy(streamX) - Entropy.globalConditionalEntropy(streamX, streamY),
+                Entropy.globalEntropy(streamY) - Entropy.globalConditionalEntropy(streamY, streamX), 0.000001);
+    }
+
+    @org.junit.Test
+    public void localConditionalEntropy() {
+        double[] lceY = new double[streamX.length];
+        double[] lceX = new double[streamX.length];
+        double[] ljexy = Entropy.localConditionalEntropy(streamX, streamY);
+        double[] ley = Entropy.localEntropy(streamY);
+        double[] ljeyx = Entropy.localConditionalEntropy(streamY, streamX);
+        double[] lex = Entropy.localEntropy(streamX);
+
+        for (int i = 0; i < streamX.length; i++) {
+            lceY[i] = ley[i] - ljeyx[i];
+            lceX[i] = lex[i] - ljexy[i];
+        }
+
+        //h(x) - h(x|y) = h(y) - h(y|x) 
+        assertArrayEquals(lceY,lceX, 0.000001);
     }
 
     @org.junit.Test
@@ -102,7 +122,7 @@ public class Test {
     }
 
     @org.junit.Test
-    public void entropyRate() {
+    public void localEntropyRate() {
 
         int[][] matrix = new int[len][2];
         double[][] res = new double[len][2];
@@ -115,7 +135,7 @@ public class Test {
         }
 
         // calculate entropy rate
-        res = Entropy.entropyRate(matrix, 2);
+        res = Entropy.localEntropyRate(matrix, 2);
 
         // transpose result matrix
         for (int i = 0; i < len; i++) {
@@ -126,4 +146,20 @@ public class Test {
         assertArrayEquals(resT[0], erCalc.computeLocalFromPreviousObservations(streamX), 0.000001);
         assertArrayEquals(resT[1], erCalc.computeLocalFromPreviousObservations(streamY), 0.000001);
     }
+
+    @org.junit.Test
+    public void averagedEntropyRate() {
+        
+        int[][] matrix = new int[len][2];
+        // create input matrix
+        for (int i = 0; i < len; i++) {
+            matrix[i][0] = streamX[i];
+            matrix[i][1] = streamY[i];
+        }
+        
+        double res = Entropy.averagedEntropyRate(matrix, 2);
+        
+        assertEquals(res, erCalc.computeAverageLocal(matrix), 0.000001);
+    }
+    
 }

@@ -95,7 +95,7 @@ public class Entropy {
     }
 
     // calculate local conditional entropy given two data streams
-    public static double[][] entropyRate(int[][] matrix, int k) {
+    public static double[][] localEntropyRate(int[][] matrix, int k) {
 
         int rows = matrix.length;
         int cols = matrix[0].length;
@@ -147,10 +147,82 @@ public class Entropy {
         return result;
     }
 
-    //calculate excess entropy
-    public static double[][] excessEntropy(int[][] matrix, int k)
+    // calculate excess entropy
+    public static double averagedEntropyRate(int[][] matrix, int k) {
+        double res = 0.0;
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+
+        double[][] result = new double[rows][cols];
+        double[][] histOcc = new double[2][(int) Math.pow(2, k)];
+
+        int observations = (rows - k) * cols;
+
+        for (int i = 0; i < cols; i++) {
+            for (int h = 0; h < rows - k; h++) {
+
+                int dec = 0;
+
+                // calculate decimal representation of history slot
+                int j;
+                for (j = h; j < h + k; j++) {
+                    dec *= 2;
+                    dec += matrix[j][i];
+                }
+
+                // update occurrences
+                histOcc[matrix[j][i]][dec]++;
+            }
+        }
+
+        for (int i = 0; i < cols; i++) {
+            for (int h = 0; h < rows - k; h++) {
+
+                int dec = 0;
+                double pxy;
+                double py;
+
+                // calculate decimal representation of history slot
+                int j;
+                for (j = h; j < h + k; j++) {
+                    dec *= 2;
+                    dec += matrix[j][i];
+                }
+
+                // calculate frequencies
+                pxy = histOcc[matrix[j][i]][dec] / observations;
+                py = (histOcc[0][dec] + histOcc[1][dec]) / observations;
+
+                // update the cell
+                result[j][i] = -MathUtils.log2(pxy / py);
+            }
+        }
+
+        for (int i = 0; i < histOcc[0].length; i++) {
+            for (int j = 0; j < k; j++) {
+                // calculate frequencies
+                double pxy = histOcc[j][i] / observations;
+                double py = (histOcc[0][i] + histOcc[1][i]) / observations;
+                if (pxy > 0.0)
+                    // update the cell
+                    res += pxy * -MathUtils.log2(pxy / py);
+            }
+        }
+
+        return res;
+    }
+
+    //excess entropy
+    public static double excessEntropy(int[][] matrix)
     {
-        return null;
+        double res=0.0;
+        int len = matrix[0].length;
+        
+        for (int i = 0; i < len -1; i++) {
+            res += averagedEntropyRate(matrix, i) - averagedEntropyRate(matrix, len);
+        }
+        return 0;
+        
     }
     
     // calculate single value occurrences in a stream
