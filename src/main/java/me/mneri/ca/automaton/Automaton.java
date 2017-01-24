@@ -1,8 +1,8 @@
 package me.mneri.ca.automaton;
 
 import java.util.HashSet;
-
 import java.util.Random;
+
 import me.mneri.ca.rule.Rule;
 
 public class Automaton {
@@ -76,5 +76,12 @@ public class Automaton {
         }
 
         return automaton;
+    }
+
+    public void toArray(boolean[] out) {
+        int size = out.length;
+
+        for (int i = 0; i < size; i++)
+            out[i] = get(i - size / 2);
     }
 }
