@@ -1,5 +1,7 @@
 package me.mneri.ca.measures;
 
+import java.util.Hashtable;
+
 import me.mneri.ca.util.MathUtils;
 
 public class Entropy {
@@ -101,7 +103,8 @@ public class Entropy {
         int cols = matrix[0].length;
 
         double[][] result = new double[rows][cols];
-        double[][] histOcc = new double[2][(int) Math.pow(2, k)];
+        // double[][] histOcc = new double[2][(int) Math.pow(2, k)];
+        Hashtable<Integer, Hashtable<Integer, Integer>> histOcc = new Hashtable<Integer, Hashtable<Integer, Integer>>();
 
         int observations = (rows - k) * cols;
 
@@ -118,7 +121,19 @@ public class Entropy {
                 }
 
                 // update occurrences
-                histOcc[matrix[j][i]][dec]++;
+                // histOcc[matrix[j][i]][dec]++;
+
+                if (histOcc.get(dec) != null) {
+                    if (histOcc.get(dec).get(matrix[j][i]) != null)
+                        histOcc.get(dec).put(matrix[j][i], histOcc.get(dec).get(matrix[j][i]) + 1);
+                    else
+                        histOcc.get(dec).put(matrix[j][i], 1);
+                } else {
+                    histOcc.put(dec, new Hashtable<Integer, Integer>());
+                    histOcc.get(dec).put(matrix[j][i], 1);
+                    // insert the other counter
+                    histOcc.get(dec).put(1 - matrix[j][i], 0);
+                }
             }
         }
 
@@ -137,8 +152,10 @@ public class Entropy {
                 }
 
                 // calculate frequencies
-                pxy = histOcc[matrix[j][i]][dec] / observations;
-                py = (histOcc[0][dec] + histOcc[1][dec]) / observations;
+                // pxy = histOcc[matrix[j][i]][dec] / observations;
+                pxy = (double) histOcc.get(dec).get(matrix[j][i]) / observations;
+                // py = (histOcc[0][dec] + histOcc[1][dec]) / observations;
+                py = (double) (histOcc.get(dec).get(0) + histOcc.get(dec).get(1)) / observations;
 
                 // update the cell
                 result[j][i] = -MathUtils.log2(pxy / py);
@@ -153,8 +170,8 @@ public class Entropy {
         int rows = matrix.length;
         int cols = matrix[0].length;
 
-        double[][] result = new double[rows][cols];
-        double[][] histOcc = new double[2][(int) Math.pow(2, k)];
+        // double[][] histOcc = new double[2][(int) Math.pow(2, k)];
+        Hashtable<Integer, Hashtable<Integer, Integer>> histOcc = new Hashtable<Integer, Hashtable<Integer, Integer>>();
 
         int observations = (rows - k) * cols;
 
@@ -171,38 +188,30 @@ public class Entropy {
                 }
 
                 // update occurrences
-                histOcc[matrix[j][i]][dec]++;
-            }
-        }
+                // histOcc[matrix[j][i]][dec]++;
 
-        for (int i = 0; i < cols; i++) {
-            for (int h = 0; h < rows - k; h++) {
-
-                int dec = 0;
-                double pxy;
-                double py;
-
-                // calculate decimal representation of history slot
-                int j;
-                for (j = h; j < h + k; j++) {
-                    dec *= 2;
-                    dec += matrix[j][i];
+                if (histOcc.get(dec) != null) {
+                    if (histOcc.get(dec).get(matrix[j][i]) != null)
+                        histOcc.get(dec).put(matrix[j][i], histOcc.get(dec).get(matrix[j][i]) + 1);
+                    else
+                        histOcc.get(dec).put(matrix[j][i], 1);
+                } else {
+                    histOcc.put(dec, new Hashtable<Integer, Integer>());
+                    histOcc.get(dec).put(matrix[j][i], 1);
+                    // insert the other counter
+                    histOcc.get(dec).put(1 - matrix[j][i], 0);
                 }
-
-                // calculate frequencies
-                pxy = histOcc[matrix[j][i]][dec] / observations;
-                py = (histOcc[0][dec] + histOcc[1][dec]) / observations;
-
-                // update the cell
-                result[j][i] = -MathUtils.log2(pxy / py);
             }
         }
 
-        for (int i = 0; i < histOcc[0].length; i++) {
-            for (int j = 0; j < k; j++) {
+        // for (int i = 0; i < histOcc.length; i++) {
+        for (Integer i : histOcc.keySet()) {
+            for (int j = 0; j < 2; j++) {
                 // calculate frequencies
-                double pxy = histOcc[j][i] / observations;
-                double py = (histOcc[0][i] + histOcc[1][i]) / observations;
+                // double pxy = histOcc[j][i] / observations;
+                double pxy = (double) histOcc.get(i).get(j) / observations;
+                // double py = (histOcc[0][i] + histOcc[1][i]) / observations;
+                double py = (double) (histOcc.get(i).get(0) + histOcc.get(i).get(1)) / observations;
                 if (pxy > 0.0)
                     // update the cell
                     res += pxy * -MathUtils.log2(pxy / py);
@@ -212,19 +221,38 @@ public class Entropy {
         return res;
     }
 
-    //excess entropy
-    public static double excessEntropy(int[][] matrix)
-    {
-        double res=0.0;
-        int len = matrix[0].length;
-        
-        for (int i = 0; i < len -1; i++) {
-            res += averagedEntropyRate(matrix, i) - averagedEntropyRate(matrix, len);
+    // excess entropy
+    public static double excessEntropy(int[][] matrix) {
+        double res = 0.0;
+        int rows = matrix.length;
+        double aee = averagedEntropyRate(matrix, rows - 1);
+
+        for (int i = 1; i <= rows - 2; i++) {
+            res += averagedEntropyRate(matrix, i) - aee;
         }
-        return 0;
-        
+        return res;
+
     }
-    
+
+    // excess entropy
+    public static double[][] localExcessEntropy(int[][] matrix, int k) {
+
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+
+        double res[][] = new double[rows][cols];
+
+        double[][] lerK = localEntropyRate(matrix, k);
+        double[][] lerMax = localEntropyRate(matrix, rows - 1);
+
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < cols; j++)
+                res[i][j] = lerK[i][j] - lerMax[i][j];
+
+        return res;
+
+    }
+
     // calculate single value occurrences in a stream
     public static double[] valuesFrequencies(int[] x) {
 
