@@ -2,6 +2,7 @@ package me.mneri.ca.automaton;
 
 import java.util.HashSet;
 
+import java.util.Random;
 import me.mneri.ca.rule.Rule;
 
 public class Automaton {
@@ -63,5 +64,17 @@ public class Automaton {
         }
 
         return concerned;
+    }
+
+    public static Automaton random(Rule rule, int size) {
+        Automaton automaton = new Automaton(rule);
+        Random random = new Random();
+
+        for (int i = -size / 2; i < size / 2; i++) {
+            if (random.nextBoolean())
+                automaton.mSet.add(i);
+        }
+
+        return automaton;
     }
 }

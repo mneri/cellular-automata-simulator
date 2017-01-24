@@ -15,7 +15,7 @@ public class SimulationModel {
         void onUpdate();
     }
 
-    private Automaton mAutomaton = Automaton.canonical(new Rule30());
+    private Automaton mAutomaton = Automaton.random(new Rule30(), 256);
     private SpaceTimeDiagram mDiagram = new SpaceTimeDiagram(mAutomaton);
     private List<Listener> mListeners = new ArrayList<>();
     private boolean mRunning;
