@@ -23,7 +23,6 @@ public class Automaton {
         int arity = mRule.arity();
         int[] neighbors = new int[arity];
         boolean[] states = new boolean[arity];
-        HashSet<Integer> concerned = getConcernedCells(mSet);
         Automaton evolved = new Automaton(mRule);
 
         for (int i = 0; i < arity; i++)
@@ -31,6 +30,8 @@ public class Automaton {
 
         if (mRule.update(states) != mDefault)
             evolved.mDefault = !mDefault;
+
+        HashSet<Integer> concerned = getConcernedCells(mSet);
 
         for (Integer cell : concerned) {
             mRule.neighborhood(cell, neighbors);

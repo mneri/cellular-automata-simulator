@@ -2,6 +2,7 @@ package me.mneri.ca.gui;
 
 import me.mneri.ca.automaton.Automaton;
 import me.mneri.ca.drawable.SpaceTimeDiagram;
+import me.mneri.ca.rule.Rule1;
 import me.mneri.ca.rule.Rule110;
 import me.mneri.ca.rule.Rule30;
 
@@ -14,7 +15,7 @@ public class SimulationModel {
         void onUpdate();
     }
 
-    private Automaton mAutomaton = Automaton.canonical(new Rule51());
+    private Automaton mAutomaton = Automaton.canonical(new Rule1());
     private SpaceTimeDiagram mDiagram = new SpaceTimeDiagram(mAutomaton);
     private List<Listener> mListeners = new ArrayList<>();
     private boolean mRunning;
