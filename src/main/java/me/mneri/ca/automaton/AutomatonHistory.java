@@ -23,4 +23,11 @@ public class AutomatonHistory {
     public int size() {
         return mAutomatons.size();
     }
+
+    public void toArray(boolean[][] out) {
+        int height = out.length;
+
+        for (int i = 0; i < height; i++)
+            mAutomatons.get(i).toArray(out[i]);
+    }
 }
