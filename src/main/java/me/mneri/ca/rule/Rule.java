@@ -5,5 +5,5 @@ public interface Rule {
 
     void neighborhood(int i, int[] out);
 
-    int update(int[] states);
+    boolean update(boolean[] states);
 }

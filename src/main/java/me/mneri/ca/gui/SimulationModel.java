@@ -2,17 +2,19 @@ package me.mneri.ca.gui;
 
 import me.mneri.ca.automaton.Automaton;
 import me.mneri.ca.drawable.SpaceTimeDiagram;
+import me.mneri.ca.rule.Rule110;
 import me.mneri.ca.rule.Rule30;
 
 import java.util.ArrayList;
 import java.util.List;
+import me.mneri.ca.rule.Rule51;
 
 public class SimulationModel {
     public interface Listener {
         void onUpdate();
     }
 
-    private Automaton mAutomaton = Automaton.canonical(1024, new Rule30());
+    private Automaton mAutomaton = Automaton.canonical(new Rule51());
     private SpaceTimeDiagram mDiagram = new SpaceTimeDiagram(mAutomaton);
     private List<Listener> mListeners = new ArrayList<>();
     private boolean mRunning;
@@ -38,9 +40,7 @@ public class SimulationModel {
         mRunning = true;
 
         (new Thread(() -> {
-            int iterations = 500;
-
-            while (iterations-- > 0) {
+            while (isRunning()) {
                 mDiagram.tick();
                 notifyListeners();
             }

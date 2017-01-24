@@ -77,7 +77,7 @@ public class SimulationPanel extends JPanel {
 
         for (int i = gridTop; i < gridBottom; i++) {
             for (int j = gridLeft; j < gridRight; j++) {
-                if (mDiagram.getState(i, j) == 1) {
+                if (mDiagram.getState(i, j)) {
                     int x = (int) (j - mScrollX);
                     int y = (int) (i - mScrollY);
 
