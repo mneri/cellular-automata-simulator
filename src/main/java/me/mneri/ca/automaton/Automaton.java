@@ -15,9 +15,13 @@ public class Automaton {
     }
 
     public static Automaton canonical(Rule rule) {
-        Automaton automaton = new Automaton(rule);
+        Automaton automaton = Automaton.empty(rule);
         automaton.mSet.add(0);
         return automaton;
+    }
+
+    public static Automaton empty(Rule rule) {
+        return new Automaton(rule);
     }
 
     public Automaton evolve() {
@@ -67,7 +71,7 @@ public class Automaton {
     }
 
     public static Automaton random(Rule rule, int size) {
-        Automaton automaton = new Automaton(rule);
+        Automaton automaton = Automaton.empty(rule);
         Random random = new Random();
 
         for (int i = -size / 2; i < size / 2; i++) {

@@ -11,11 +11,6 @@ public class AutomatonHistory {
         mAutomatons.add(automaton);
     }
 
-    public void evolve() {
-        mLast = mLast.evolve();
-        mAutomatons.add(mLast);
-    }
-
     public Automaton get(int time) {
         return mAutomatons.get(time);
     }
@@ -24,10 +19,20 @@ public class AutomatonHistory {
         return mAutomatons.size();
     }
 
-    public void toArray(boolean[][] out) {
-        int height = out.length;
+    public void tick() {
+        mLast = mLast.evolve();
+        mAutomatons.add(mLast);
+    }
 
-        for (int i = 0; i < height; i++)
-            mAutomatons.get(i).toArray(out[i]);
+    public void tick(int n) {
+        for (int i = 0; i < n; i++)
+            tick();
+    }
+
+    public void toArray(boolean[][] out) {
+        int length = out.length;
+
+        for (int i = 0; i < length; i++)
+            get(i).toArray(out[i]);
     }
 }

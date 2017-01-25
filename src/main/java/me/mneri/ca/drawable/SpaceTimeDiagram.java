@@ -1,5 +1,6 @@
 package me.mneri.ca.drawable;
 
+import java.awt.*;
 import me.mneri.ca.automaton.Automaton;
 import me.mneri.ca.automaton.AutomatonHistory;
 
@@ -11,7 +12,7 @@ public class SpaceTimeDiagram {
     }
 
     public void tick() {
-        mHistory.evolve();
+        mHistory.tick();
     }
 
     public boolean getState(int i, int j) {
@@ -21,5 +22,9 @@ public class SpaceTimeDiagram {
         Automaton automaton = mHistory.get(i);
 
         return automaton.get(j);
+    }
+
+    public void paint(Graphics2D g) {
+
     }
 }
