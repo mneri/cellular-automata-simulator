@@ -3,7 +3,6 @@ package me.mneri.ca.util;
 import me.mneri.ca.interpolator.Interpolator;
 
 import java.awt.*;
-import java.util.Arrays;
 
 public class Colors {
     public static Color fromHsbArray(float[] hsb) {

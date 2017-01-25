@@ -104,7 +104,7 @@ public class Entropy {
 
         double[][] result = new double[rows][cols];
         // double[][] histOcc = new double[2][(int) Math.pow(2, k)];
-        Hashtable<Integer, Hashtable<Integer, Integer>> histOcc = new Hashtable<Integer, Hashtable<Integer, Integer>>();
+        Hashtable<Integer, int[]> histOcc = new Hashtable<Integer, int[]>();
 
         int observations = (rows - k) * cols;
 
@@ -124,15 +124,12 @@ public class Entropy {
                 // histOcc[matrix[j][i]][dec]++;
 
                 if (histOcc.get(dec) != null) {
-                    if (histOcc.get(dec).get(matrix[j][i]) != null)
-                        histOcc.get(dec).put(matrix[j][i], histOcc.get(dec).get(matrix[j][i]) + 1);
-                    else
-                        histOcc.get(dec).put(matrix[j][i], 1);
+                    histOcc.get(dec)[matrix[j][i]]++;
+
                 } else {
-                    histOcc.put(dec, new Hashtable<Integer, Integer>());
-                    histOcc.get(dec).put(matrix[j][i], 1);
-                    // insert the other counter
-                    histOcc.get(dec).put(1 - matrix[j][i], 0);
+                    histOcc.put(dec, new int[2]);
+                    histOcc.get(dec)[matrix[j][i]] = 1;
+
                 }
             }
         }
@@ -153,9 +150,9 @@ public class Entropy {
 
                 // calculate frequencies
                 // pxy = histOcc[matrix[j][i]][dec] / observations;
-                pxy = (double) histOcc.get(dec).get(matrix[j][i]) / observations;
+                pxy = (double) histOcc.get(dec)[matrix[j][i]] / observations;
                 // py = (histOcc[0][dec] + histOcc[1][dec]) / observations;
-                py = (double) (histOcc.get(dec).get(0) + histOcc.get(dec).get(1)) / observations;
+                py = (double) (histOcc.get(dec)[0] + histOcc.get(dec)[1]) / observations;
 
                 // update the cell
                 result[j][i] = -MathUtils.log2(pxy / py);
@@ -171,7 +168,7 @@ public class Entropy {
         int cols = matrix[0].length;
 
         // double[][] histOcc = new double[2][(int) Math.pow(2, k)];
-        Hashtable<Integer, Hashtable<Integer, Integer>> histOcc = new Hashtable<Integer, Hashtable<Integer, Integer>>();
+        Hashtable<Integer, int[]> histOcc = new Hashtable<Integer, int[]>();
 
         int observations = (rows - k) * cols;
 
@@ -191,15 +188,10 @@ public class Entropy {
                 // histOcc[matrix[j][i]][dec]++;
 
                 if (histOcc.get(dec) != null) {
-                    if (histOcc.get(dec).get(matrix[j][i]) != null)
-                        histOcc.get(dec).put(matrix[j][i], histOcc.get(dec).get(matrix[j][i]) + 1);
-                    else
-                        histOcc.get(dec).put(matrix[j][i], 1);
+                    histOcc.get(dec)[matrix[j][i]]++;
                 } else {
-                    histOcc.put(dec, new Hashtable<Integer, Integer>());
-                    histOcc.get(dec).put(matrix[j][i], 1);
-                    // insert the other counter
-                    histOcc.get(dec).put(1 - matrix[j][i], 0);
+                    histOcc.put(dec, new int[2]);
+                    histOcc.get(dec)[matrix[j][i]] = 1;
                 }
             }
         }
@@ -209,9 +201,9 @@ public class Entropy {
             for (int j = 0; j < 2; j++) {
                 // calculate frequencies
                 // double pxy = histOcc[j][i] / observations;
-                double pxy = (double) histOcc.get(i).get(j) / observations;
+                double pxy = (double) histOcc.get(i)[j] / observations;
                 // double py = (histOcc[0][i] + histOcc[1][i]) / observations;
-                double py = (double) (histOcc.get(i).get(0) + histOcc.get(i).get(1)) / observations;
+                double py = (double) (histOcc.get(i)[0] + histOcc.get(i)[1]) / observations;
                 if (pxy > 0.0)
                     // update the cell
                     res += pxy * -MathUtils.log2(pxy / py);
