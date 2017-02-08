@@ -11,8 +11,10 @@ public class SimulationView extends JFrame {
     private static final int FRAME_HEIGHT = 540;
     private static final int FRAME_WIDTH = 960;
 
+    private JSpinner mKSpinner;
     JComboBox<DiagramEnum> mMeasureCombo;
     private JButton mPlayButton;
+    private JSpinner mRuleSpinner;
     private SimulationPanel mSimulationPanel;
     private JButton mSettingsButton;
     private JLabel mStatusLabel;
@@ -58,9 +60,17 @@ public class SimulationView extends JFrame {
         toolBar.add(mPlayButton);
 
         toolBar.add(Box.createHorizontalGlue());
+
+        mRuleSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 255, 1));
+        toolBar.add(mRuleSpinner);
+
+        toolBar.addSeparator();
         
         mMeasureCombo = new JComboBox<>();
         toolBar.add(mMeasureCombo);
+
+        mKSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 255, 1));
+        toolBar.add(mKSpinner);
 
         toolBar.addSeparator();
 
@@ -83,8 +93,16 @@ public class SimulationView extends JFrame {
         return mMeasureCombo;
     }
 
+    JSpinner getKSpinner() {
+        return mKSpinner;
+    }
+
     JButton getPlayButton() {
         return mPlayButton;
+    }
+
+    JSpinner getRuleSpinner() {
+        return mRuleSpinner;
     }
 
     JButton getSettingsButton() {

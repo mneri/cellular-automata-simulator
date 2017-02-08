@@ -1,15 +1,15 @@
 package me.mneri.ca.drawable;
 
-import me.mneri.ca.automaton.AutomatonHistory;
-import me.mneri.ca.measures.Entropy;
+import me.mneri.ca.automaton.Automaton;
+import me.mneri.ca.measure.Entropy;
 
 public class EntropyTimeDiagram extends Diagram {
-    public EntropyTimeDiagram(AutomatonHistory history) {
+    public EntropyTimeDiagram(Automaton history) {
         super(history);
     }
 
     @Override
-    protected double[][] prepare(AutomatonHistory history) {
+    protected double[][] prepare(Automaton history) {
         int[][] state = new int[1024][1024];
         double[] row;
         double[][] data = new double[1024][1024];

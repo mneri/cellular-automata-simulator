@@ -2,8 +2,7 @@ package me.mneri.ca.drawable;
 
 import java.awt.*;
 
-import me.mneri.ca.automaton.AutomatonHistory;
-import me.mneri.ca.interpolator.AccelerateInterpolator;
+import me.mneri.ca.automaton.Automaton;
 import me.mneri.ca.interpolator.LinearInterpolator;
 import me.mneri.ca.util.Colors;
 
@@ -17,11 +16,11 @@ public abstract class Diagram implements Drawable {
     private int mScrollX;
     private int mScrollY;
 
-    public Diagram(AutomatonHistory history) {
+    public Diagram(Automaton history) {
         this(history, Colors.createHsbGradient(Color.GREEN, Color.RED, new LinearInterpolator(), 4));
     }
 
-    public Diagram(AutomatonHistory history, Color[] gradient) {
+    public Diagram(Automaton history, Color[] gradient) {
         mData = prepare(history);
         mGradient = gradient;
     }
@@ -66,7 +65,7 @@ public abstract class Diagram implements Drawable {
         }
     }
 
-    protected abstract double[][] prepare(AutomatonHistory history);
+    protected abstract double[][] prepare(Automaton history);
 
     public void scroll(int dx, int dy) {
         setScroll(mScrollX + dx, mScrollY + dy);

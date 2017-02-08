@@ -10,6 +10,8 @@ import me.mneri.ca.util.IconFactory;
 import me.mneri.ca.widget.SimulationPanel;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -55,6 +57,9 @@ public class SimulationController {
             SimulationPanel simPanel = mView.getSimulationPanel();
             simPanel.setDiagram(diagram);
             simPanel.repaint();
+        });
+        mView.getRuleSpinner().addChangeListener((ChangeEvent e) -> {
+
         });
         mView.getPlayButton().addActionListener((ActionEvent e) -> Application.invokeLater(() -> {
             JButton playButton = mView.getPlayButton();

@@ -1,14 +1,14 @@
 package me.mneri.ca.drawable;
 
-import me.mneri.ca.automaton.AutomatonHistory;
+import me.mneri.ca.automaton.Automaton;
 
 public class SpaceTimeDiagram extends Diagram {
-    public SpaceTimeDiagram(AutomatonHistory history) {
+    public SpaceTimeDiagram(Automaton history) {
         super(history);
     }
 
     @Override
-    protected double[][] prepare(AutomatonHistory history) {
+    protected double[][] prepare(Automaton history) {
         double[][] data = new double[1024][1024];
 
         for (int i = 0; i < 1024; i++) {

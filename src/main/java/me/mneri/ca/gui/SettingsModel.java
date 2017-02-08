@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 import me.mneri.ca.app.Application;
 import me.mneri.ca.app.Settings;
-import me.mneri.ca.interpolator.Interpolator;
 import me.mneri.ca.interpolator.InterpolatorEnum;
 
 public class SettingsModel {

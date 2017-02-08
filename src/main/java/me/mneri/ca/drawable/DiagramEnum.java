@@ -1,6 +1,6 @@
 package me.mneri.ca.drawable;
 
-import me.mneri.ca.automaton.AutomatonHistory;
+import me.mneri.ca.automaton.Automaton;
 
 public enum DiagramEnum {
     STATE("State"),
@@ -32,7 +32,7 @@ public enum DiagramEnum {
         }
     }
 
-    public Diagram toDiagram(AutomatonHistory history) {
+    public Diagram toDiagram(Automaton history) {
         switch (this) {
             case STATE:
                 return new SpaceTimeDiagram(history);

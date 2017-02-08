@@ -6,8 +6,8 @@ import java.util.Random;
 import infodynamics.measures.discrete.EntropyCalculatorDiscrete;
 import infodynamics.measures.discrete.EntropyRateCalculatorDiscrete;
 import infodynamics.measures.discrete.MutualInformationCalculatorDiscrete;
-import me.mneri.ca.measures.Entropy;
-import me.mneri.ca.measures.Information;
+import me.mneri.ca.measure.Entropy;
+import me.mneri.ca.measure.Information;
 
 public class Test {
 
