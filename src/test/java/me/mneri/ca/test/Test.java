@@ -86,7 +86,7 @@ public class Test {
     @org.junit.Test
     public void globalConditionalEntropy() {
         
-        // H(X) - H(X|Y) = (Y) - H(Y|X)
+        // H(X) - H(X|Y) = H(Y) - H(Y|X)
         assertEquals(Entropy.globalEntropy(streamX) - Entropy.globalConditionalEntropy(streamX, streamY),
                 Entropy.globalEntropy(streamY) - Entropy.globalConditionalEntropy(streamY, streamX), 0.000001);
     }

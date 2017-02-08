@@ -21,6 +21,24 @@ public class Entropy {
         return -(fone * MathUtils.log2(fone) + fzero * MathUtils.log2(fzero));
     }
 
+    // calculate global entropy in a binary data stream
+    public static double globalEntropy(int[][] states) {
+
+        int rows = states.length;
+        int cols = states[0].length;
+        float ones = 0;
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < cols; j++)
+                ones += states[i][j];
+
+        double fone = ones / (rows * cols);
+        double fzero = 1 - fone;
+        if (fone == 0.0 || fzero == 0.0)
+            return 0.0;
+
+        return -(fone * MathUtils.log2(fone) + fzero * MathUtils.log2(fzero));
+    }
+
     // calculate local entropy in a binary data stream for given value
     public static double[] localEntropy(int[] states) {
 
@@ -79,6 +97,7 @@ public class Entropy {
     // calculate global conditional entropy given two data streams
     public static double globalConditionalEntropy(int[] x, int[] y) {
 
+        // H(X|Y) = H(X,Y) - H(Y)
         return globalJointEntropy(x, y) - globalEntropy(y);
     }
 
@@ -89,7 +108,8 @@ public class Entropy {
         double[] lje = localJointEntropy(x, y);
         double[] lex = localEntropy(y);
 
-        // computing frequencies
+        // computing frequencies:
+        // h(x|y) = h(x,y) - h(y)
         for (int i = 0; i < result.length; i++)
             result[i] = lje[i] - lex[i];
 
@@ -103,7 +123,6 @@ public class Entropy {
         int cols = matrix[0].length;
 
         double[][] result = new double[rows][cols];
-        // double[][] histOcc = new double[2][(int) Math.pow(2, k)];
         Hashtable<Integer, int[]> histOcc = new Hashtable<Integer, int[]>();
 
         int observations = (rows - k) * cols;
@@ -121,8 +140,6 @@ public class Entropy {
                 }
 
                 // update occurrences
-                // histOcc[matrix[j][i]][dec]++;
-
                 if (histOcc.get(dec) != null) {
                     histOcc.get(dec)[matrix[j][i]]++;
 
@@ -149,9 +166,7 @@ public class Entropy {
                 }
 
                 // calculate frequencies
-                // pxy = histOcc[matrix[j][i]][dec] / observations;
                 pxy = (double) histOcc.get(dec)[matrix[j][i]] / observations;
-                // py = (histOcc[0][dec] + histOcc[1][dec]) / observations;
                 py = (double) (histOcc.get(dec)[0] + histOcc.get(dec)[1]) / observations;
 
                 // update the cell
@@ -167,7 +182,6 @@ public class Entropy {
         int rows = matrix.length;
         int cols = matrix[0].length;
 
-        // double[][] histOcc = new double[2][(int) Math.pow(2, k)];
         Hashtable<Integer, int[]> histOcc = new Hashtable<Integer, int[]>();
 
         int observations = (rows - k) * cols;
@@ -185,8 +199,6 @@ public class Entropy {
                 }
 
                 // update occurrences
-                // histOcc[matrix[j][i]][dec]++;
-
                 if (histOcc.get(dec) != null) {
                     histOcc.get(dec)[matrix[j][i]]++;
                 } else {
@@ -196,53 +208,52 @@ public class Entropy {
             }
         }
 
+        // Calculate ER due to the formula obtained
+        // via the conditional entropy:
+        //
+        // Hm = P( Xn, X(L) ) * log( P( Xn,X(L) ) / P( X(L) ) )
+        // given P( Xn | X(L) ) = P( Xn, X(L) ) / P( X(L) )
+
         // for (int i = 0; i < histOcc.length; i++) {
         for (Integer i : histOcc.keySet()) {
             for (int j = 0; j < 2; j++) {
                 // calculate frequencies
-                // double pxy = histOcc[j][i] / observations;
                 double pxy = (double) histOcc.get(i)[j] / observations;
-                // double py = (histOcc[0][i] + histOcc[1][i]) / observations;
                 double py = (double) (histOcc.get(i)[0] + histOcc.get(i)[1]) / observations;
                 if (pxy > 0.0)
                     // update the cell
                     res += pxy * -MathUtils.log2(pxy / py);
             }
         }
-
         return res;
     }
 
-    // excess entropy
-    public static double excessEntropy(int[][] matrix) {
-        double res = 0.0;
-        int rows = matrix.length;
-        double aee = averagedEntropyRate(matrix, rows - 1);
+    // return an array of differences of crescent k-entropy rate
+    // or second differences
+    public static double[] derivedEntropyRate(int[][] matrix, int liv) {
 
-        for (int i = 1; i <= rows - 2; i++) {
-            res += averagedEntropyRate(matrix, i) - aee;
+        int rows = matrix.length;
+
+        double[] der1 = new double[rows - 1];
+        double[] der2 = new double[rows - 2];
+
+        for (int i = 1; i < rows; i++) {
+            // calculate first differences
+            der1[i - 1] = averagedEntropyRate(matrix, i) - averagedEntropyRate(matrix, i - 1);
+
+            // calculate the seconds
+            if (i > 1)
+                der2[i - 2] = der1[i-1] - der1[i - 2];
         }
-        return res;
 
+        if (liv == 0)
+            return der1;
+        else
+            return der2;
     }
 
-    // excess entropy
-    public static double[][] localExcessEntropy(int[][] matrix, int k) {
-
-        int rows = matrix.length;
-        int cols = matrix[0].length;
-
-        double res[][] = new double[rows][cols];
-
-        double[][] lerK = localEntropyRate(matrix, k);
-        double[][] lerMax = localEntropyRate(matrix, rows - 1);
-
-        for (int i = 0; i < rows; i++)
-            for (int j = 0; j < cols; j++)
-                res[i][j] = lerK[i][j] - lerMax[i][j];
-
-        return res;
-
+    public static double[] derivedEntropyRate(int[][] matrix) {
+        return derivedEntropyRate(matrix, 1);
     }
 
     // calculate single value occurrences in a stream
