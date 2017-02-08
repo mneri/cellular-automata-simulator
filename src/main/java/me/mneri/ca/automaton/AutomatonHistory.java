@@ -12,6 +12,9 @@ public class AutomatonHistory {
     }
 
     public Automaton get(int time) {
+        if (time < 0 || time >= mAutomatons.size())
+            return Automaton.empty(null);
+
         return mAutomatons.get(time);
     }
 
@@ -29,7 +32,7 @@ public class AutomatonHistory {
             tick();
     }
 
-    public void toArray(boolean[][] out) {
+    public void toArray(int[][] out) {
         int length = out.length;
 
         for (int i = 0; i < length; i++)

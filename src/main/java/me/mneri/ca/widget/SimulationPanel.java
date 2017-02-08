@@ -1,135 +1,75 @@
 package me.mneri.ca.widget;
 
-import me.mneri.ca.adapter.AncestorAdapter;
-import me.mneri.ca.drawable.SpaceTimeDiagram;
-import me.mneri.ca.util.Colors;
-
 import javax.swing.*;
-import javax.swing.event.AncestorEvent;
 import java.awt.*;
-import java.util.Set;
 
-import static java.awt.RenderingHints.KEY_TEXT_ANTIALIASING;
-import static java.awt.RenderingHints.VALUE_TEXT_ANTIALIAS_ON;
+import me.mneri.ca.drawable.Diagram;
 
 public class SimulationPanel extends JPanel {
-    private static final Color CELL_COLOR = Color.decode("#cdcdcd");
-    private static final RenderingHints HINTS = new RenderingHints(KEY_TEXT_ANTIALIASING, VALUE_TEXT_ANTIALIAS_ON);
-    private static final double SCALE_FACTOR = 1.2d;
-    private static final double SCALE_DEFAULT = 4.0d;
-    private static final double SCALE_MIN = 1.0d;
-    private static final double SCALE_MAX = 8.0d;
+    private static final float[] ZOOM_LEVELS = {1.0f, 2.0f, 3.0f, 4.0f, 6.0f, 8.0f, 10.0f};
 
-    private Color mBackgroundColor;
-    private SpaceTimeDiagram mDiagram;
-    private double mScrollX;
-    private double mScrollY;
-    private double mScale = SCALE_DEFAULT;
-    private double mScaleFactor = SCALE_FACTOR;
-
-    public SimulationPanel() {
-        init();
-    }
+    private Diagram mDiagram;
+    private int mScrollX;
+    private int mScrollY;
+    private int mZoomIndex;
 
     public boolean canZoomIn() {
-        return mScale * mScaleFactor < SCALE_MAX;
+        return mZoomIndex < ZOOM_LEVELS.length - 1;
     }
 
     public boolean canZoomOriginal() {
-        return mScale != SCALE_DEFAULT;
+        return mZoomIndex != 0;
     }
 
     public boolean canZoomOut() {
-        return mScale / mScaleFactor > SCALE_MIN;
-    }
-
-    private void init() {
-        addAncestorListener(new AncestorAdapter() {
-            @Override
-            public void ancestorAdded(AncestorEvent ancestorEvent) {
-                int gridWidth = (int) Math.ceil(getWidth() / mScale);
-                mScrollX = -gridWidth / 2;
-            }
-        });
+        return mZoomIndex > 0;
     }
 
     @Override
     protected void paintComponent(Graphics graphics) {
         Graphics2D g = (Graphics2D) graphics;
-        g.scale(mScale, mScale);
-        g.setRenderingHints(HINTS);
 
-        int width = getWidth();
-        int height = getHeight();
-
-        int gridLeft = (int) mScrollX;
-        int gridWidth = (int) Math.ceil(width / mScale) + 1;
-        int gridRight = gridLeft + gridWidth;
-
-        int gridTop = (int) mScrollY;
-        int gridHeight = (int) Math.ceil(height / mScale) + 1;
-        int gridBottom = gridTop + gridHeight;
-
-        g.setColor(mBackgroundColor);
-        g.fillRect(0, 0, width, height);
-
-        g.setColor(CELL_COLOR);
-
-        for (int i = gridTop; i < gridBottom; i++) {
-            for (int j = gridLeft; j < gridRight; j++) {
-                if (mDiagram.getState(i, j)) {
-                    int x = (int) (j - mScrollX);
-                    int y = (int) (i - mScrollY);
-
-                    g.fillRect(x, y, 1, 1);
-                }
-            }
-        }
+        if (mDiagram != null)
+            mDiagram.paint(g, getWidth(), getHeight());
     }
 
     public void scroll(int dx, int dy) {
-        mScrollX += dx / mScale;
-        mScrollY += dy / mScale;
-        repaint();
+        if (mDiagram != null) {
+            mDiagram.scroll(dx, dy);
+            mScrollX = mDiagram.getScrollX();
+            mScrollY = mDiagram.getScrollY();
+            repaint();
+        }
     }
 
-    public void setBackgroundColor(Color color) {
-        mBackgroundColor = color;
-        repaint();
-    }
-
-    public void setDiagram(SpaceTimeDiagram diagram) {
+    public void setDiagram(Diagram diagram) {
         mDiagram = diagram;
+        mDiagram.setScale(ZOOM_LEVELS[mZoomIndex]);
+        mDiagram.setScroll(mScrollX, mScrollY);
     }
 
-    private void setScale(double scale) {
-        if (scale < SCALE_MIN || scale > SCALE_MAX)
-            return;
-
-        int width = getWidth();
-        int height = getHeight();
-
-        int gridWidthOld = (int) Math.ceil(width / mScale) + 1;
-        int gridWidth = (int) Math.ceil(width / scale) + 1;
-
-        int gridHeightOld = (int) Math.ceil(height / mScale) + 1;
-        int gridHeight = (int) Math.ceil(height / scale) + 1;
-
-        mScale = scale;
-        mScrollX -= (gridWidth - gridWidthOld) / 2;
-        mScrollY -= (gridHeight - gridHeightOld) / 2;
-        repaint();
+    private void setScale(float scale) {
+        if (mDiagram != null) {
+            mDiagram.setScale(scale);
+            repaint();
+        }
     }
 
     public void zoomIn() {
-        setScale(mScale * mScaleFactor);
+        if (canZoomIn())
+            setScale(ZOOM_LEVELS[++mZoomIndex]);
     }
 
     public void zoomOriginal() {
-        setScale(SCALE_DEFAULT);
+        if (canZoomOriginal()) {
+            mZoomIndex = 0;
+            setScale(ZOOM_LEVELS[mZoomIndex]);
+        }
     }
 
     public void zoomOut() {
-        setScale(mScale / mScaleFactor);
+        if (canZoomOut()) {
+            setScale(ZOOM_LEVELS[--mZoomIndex]);
+        }
     }
 }

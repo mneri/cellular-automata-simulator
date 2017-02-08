@@ -6,7 +6,7 @@ import java.util.Random;
 import me.mneri.ca.rule.Rule;
 
 public class Automaton {
-    private boolean mDefault;
+    private int mDefault;
     private Rule mRule;
     private HashSet<Integer> mSet = new HashSet<>();
 
@@ -27,14 +27,14 @@ public class Automaton {
     public Automaton evolve() {
         int arity = mRule.arity();
         int[] neighbors = new int[arity];
-        boolean[] states = new boolean[arity];
+        int[] states = new int[arity];
         Automaton evolved = new Automaton(mRule);
 
         for (int i = 0; i < arity; i++)
             states[i] = mDefault;
 
         if (mRule.update(states) != mDefault)
-            evolved.mDefault = !mDefault;
+            evolved.mDefault = mDefault ^ 1;
 
         HashSet<Integer> concerned = getConcernedCells(mSet);
 
@@ -51,8 +51,8 @@ public class Automaton {
         return evolved;
     }
 
-    public boolean get(int location) {
-        return mSet.contains(location) != mDefault;
+    public int get(int location) {
+        return mSet.contains(location) ? mDefault ^ 1 : mDefault;
     }
 
     private HashSet<Integer> getConcernedCells(HashSet<Integer> active) {
@@ -82,7 +82,7 @@ public class Automaton {
         return automaton;
     }
 
-    public void toArray(boolean[] out) {
+    public void toArray(int[] out) {
         int size = out.length;
 
         for (int i = 0; i < size; i++)

@@ -1,5 +1,6 @@
 package me.mneri.ca.gui;
 
+import me.mneri.ca.drawable.DiagramEnum;
 import me.mneri.ca.util.IconFactory;
 import me.mneri.ca.widget.SimulationPanel;
 
@@ -10,12 +11,11 @@ public class SimulationView extends JFrame {
     private static final int FRAME_HEIGHT = 540;
     private static final int FRAME_WIDTH = 960;
 
-    private JButton mOpenButton;
+    JComboBox<DiagramEnum> mMeasureCombo;
     private JButton mPlayButton;
     private SimulationPanel mSimulationPanel;
     private JButton mSettingsButton;
     private JLabel mStatusLabel;
-    private JButton mStepButton;
     private JButton mZoomInButton;
     private JButton mZoomOriginalButton;
     private JButton mZoomOutButton;
@@ -54,18 +54,15 @@ public class SimulationView extends JFrame {
         toolBar.setFloatable(false);
         add(toolBar, BorderLayout.NORTH);
 
-        mOpenButton = new JButton(icons.get("open.png"));
-        toolBar.add(mOpenButton);
-
-        toolBar.addSeparator();
-
-        mStepButton = new JButton(icons.get("iteration.png"));
-        toolBar.add(mStepButton);
-
         mPlayButton = new JButton(icons.get("play.png"));
         toolBar.add(mPlayButton);
 
         toolBar.add(Box.createHorizontalGlue());
+
+        mMeasureCombo = new JComboBox<>();
+        toolBar.add(mMeasureCombo);
+
+        toolBar.addSeparator();
 
         mZoomInButton = new JButton(icons.get("zoom-in.png"));
         toolBar.add(mZoomInButton);
@@ -82,8 +79,8 @@ public class SimulationView extends JFrame {
         toolBar.add(mSettingsButton);
     }
 
-    JButton getOpenButton() {
-        return mOpenButton;
+    JComboBox<DiagramEnum> getDiagramCombo() {
+        return mMeasureCombo;
     }
 
     JButton getPlayButton() {
@@ -102,10 +99,6 @@ public class SimulationView extends JFrame {
         return mStatusLabel;
     }
 
-    JButton getStepButton() {
-        return mStepButton;
-    }
-
     JButton getZoomInButton() {
         return mZoomInButton;
     }
@@ -119,7 +112,7 @@ public class SimulationView extends JFrame {
     }
 
     private void init() {
-        setTitle("Cellular Automaton Simulator");
+        setTitle("Cellular Automata Simulator");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 }
