@@ -3,33 +3,28 @@ package me.mneri.ca.diagram;
 import java.awt.*;
 
 import me.mneri.ca.automaton.Automaton;
+import me.mneri.ca.color.Gradient;
+import me.mneri.ca.color.HsbGradient;
 import me.mneri.ca.drawable.Drawable;
 import me.mneri.ca.interpolator.LinearInterpolator;
-import me.mneri.ca.util.Colors;
 
 public abstract class Diagram implements Drawable {
     private static final int CELL_HEIGHT = 1;
     private static final int CELL_WIDTH = 1;
 
-    private Color[] mGradient;
+    private Gradient mGradient;
     private double[][] mData;
     private float mScale = 1.0f;
     private int mScrollX;
     private int mScrollY;
 
     public Diagram(Automaton history) {
-        this(history, Colors.createHsbGradient(Color.GREEN, Color.RED, new LinearInterpolator(), 4));
+        this(history, new HsbGradient(Color.GREEN, Color.RED, new LinearInterpolator(), 4));
     }
 
-    public Diagram(Automaton history, Color[] gradient) {
+    public Diagram(Automaton history, Gradient gradient) {
         mData = prepare(history);
         mGradient = gradient;
-    }
-
-    protected Color colorOf(double value) {
-        int length = mGradient.length;
-        int index = (int) Math.min(value * (length - 1), length - 1);
-        return mGradient[index];
     }
 
     public int getScrollX() {
@@ -57,9 +52,9 @@ public abstract class Diagram implements Drawable {
         for (int i = gridTop; i < gridBottom; i++) {
             for (int j = gridLeft; j < gridRight; j++) {
                 if (i > 0 && j > 0 && i < dataHeight && j < dataWidth)
-                    g.setColor(colorOf(mData[i][j]));
+                    g.setColor(mGradient.get(mData[i][j]));
                 else
-                    g.setColor(colorOf(0.0));
+                    g.setColor(mGradient.get(0.0));
 
                 g.fillRect(j - gridLeft, i - gridTop, CELL_WIDTH, CELL_HEIGHT);
             }

@@ -7,9 +7,10 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.*;
 
+import me.mneri.ca.color.HsbGradient;
 import me.mneri.ca.interpolator.Interpolator;
 import me.mneri.ca.interpolator.InterpolatorEnum;
-import me.mneri.ca.util.Colors;
+import me.mneri.ca.color.Colors;
 
 public class SettingsController {
     private static final InterpolatorEnum[] INTERPOLATORS = {LINEAR, ACCELERATE, DECELERATE, ACCELERATE_DECELERATE};
@@ -84,6 +85,6 @@ public class SettingsController {
         Color start = mModel.getCellColorHigh();
         Color end = mModel.getCellColorLow();
         Interpolator inter = mModel.getInterpolator().toInterpolator();
-        mView.getGradientPreview().setGradient(Colors.createHsbGradient(start, end, inter, 20));
+        mView.getGradientPreview().setGradient(new HsbGradient(start, end, inter, 20));
     }
 }

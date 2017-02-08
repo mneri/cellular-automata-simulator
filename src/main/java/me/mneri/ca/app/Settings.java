@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Properties;
 
-import me.mneri.ca.util.Colors;
+import me.mneri.ca.color.Colors;
 import me.mneri.ca.util.Fs;
 
 public class Settings {
