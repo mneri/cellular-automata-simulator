@@ -40,7 +40,7 @@ public class ElementaryRule implements Rule {
          *
          * For each neighbor configuration this schema tells the future state of the cell. Each neighbor configuration
          * is labelled with a number from 0 to 7, thus the rule can be represented with a number from 0 to 255
-         * (2^7 - 1). The one above is rule 110 (in binary, rule 01101110). Each bit corresponds to a given neighbors'
+         * (2^8 - 1). The one above is rule 110 (in binary, rule 01101110). Each bit corresponds to a given neighbors'
          * configuration so, for example, the third bit from the left tells the cell's future state when neighbors'
          * states are 101.
          *
