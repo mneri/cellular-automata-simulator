@@ -5,9 +5,7 @@ import infodynamics.measures.discrete.EntropyRateCalculatorDiscrete;
 import me.mneri.ca.automaton.Automaton;
 import me.mneri.ca.automaton.AutomatonHistory;
 import me.mneri.ca.measures.Entropy;
-import me.mneri.ca.rule.Rule110;
-import me.mneri.ca.rule.Rule30;
-import me.mneri.ca.rule.Rule51;
+import me.mneri.ca.rule.ElementaryRule;
 import me.mneri.ca.widget.Graphic;
 
 public class Test {
@@ -22,7 +20,7 @@ public class Test {
         erCalc.initialise();
 
         int[][] matrix = new int[rows][cols];
-        AutomatonHistory history = new AutomatonHistory(Automaton.random(new Rule110(), cols));
+        AutomatonHistory history = new AutomatonHistory(Automaton.random(new ElementaryRule(110), cols));
         history.tick(rows);
 
         System.out.printf("Entropy Rate for all k values \n\n");

@@ -12,7 +12,7 @@ public class SimulationModel {
         void onUpdate();
     }
 
-    private AutomatonHistory mHistory = new AutomatonHistory(Automaton.random(new Rule110(), 1024));
+    private AutomatonHistory mHistory = new AutomatonHistory(Automaton.random(new ElementaryRule(110), 1024));
     private List<Listener> mListeners = new ArrayList<>();
 
     public void addListener(Listener listener) {
