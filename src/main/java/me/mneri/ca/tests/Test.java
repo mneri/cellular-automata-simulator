@@ -1,4 +1,4 @@
-package me.mneri.ca.test;
+package me.mneri.ca.tests;
 
 import javax.swing.JFrame;
 import infodynamics.measures.discrete.EntropyRateCalculatorDiscrete;

@@ -59,7 +59,7 @@ public class SimulationController {
             simPanel.repaint();
         });
         mView.getRuleSpinner().addChangeListener((ChangeEvent e) -> {
-
+            
         });
         mView.getPlayButton().addActionListener((ActionEvent e) -> Application.invokeLater(() -> {
             JButton playButton = mView.getPlayButton();
