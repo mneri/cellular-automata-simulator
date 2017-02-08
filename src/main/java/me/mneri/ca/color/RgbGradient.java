@@ -42,7 +42,7 @@ public class RgbGradient implements Gradient {
     @Override
     public Color get(double value) {
         if (value < 0.0f || value > 1.0f)
-            throw new IllegalArgumentException("Value should be between 0 and 1.");
+            throw new IllegalArgumentException("Value should be between 0 and 1; it was: " + value);
 
         int length = mColors.length;
         int index = (int) Math.min(value * (length - 1), length - 1);

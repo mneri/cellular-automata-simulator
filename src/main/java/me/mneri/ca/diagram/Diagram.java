@@ -52,7 +52,7 @@ public abstract class Diagram implements Drawable {
         for (int i = gridTop; i < gridBottom; i++) {
             for (int j = gridLeft; j < gridRight; j++) {
                 if (i > 0 && j > 0 && i < dataHeight && j < dataWidth)
-                    g.setColor(mGradient.get(mData[i][j]));
+                    g.setColor(mGradient.get(Math.min(1.0, mData[i][j]))); // TODO: data can be higher than 1
                 else
                     g.setColor(mGradient.get(0.0));
 
