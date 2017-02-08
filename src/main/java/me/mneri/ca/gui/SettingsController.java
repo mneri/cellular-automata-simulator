@@ -1,16 +1,18 @@
 package me.mneri.ca.gui;
 
-import me.mneri.ca.interpolator.Interpolator;
-import me.mneri.ca.interpolator.InterpolatorFactory;
-import me.mneri.ca.interpolator.LinearInterpolator;
-import me.mneri.ca.util.Colors;
+import static me.mneri.ca.interpolator.InterpolatorEnum.*;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
 import javax.swing.*;
 
+import me.mneri.ca.interpolator.Interpolator;
+import me.mneri.ca.interpolator.InterpolatorEnum;
+import me.mneri.ca.util.Colors;
+
 public class SettingsController {
+    private static final InterpolatorEnum[] INTERPOLATORS = {LINEAR, ACCELERATE, DECELERATE, ACCELERATE_DECELERATE};
     private static final String[] ITERATIONS = {"1", "10", "100", "1000", "Continuous"};
 
     private SettingsModel mModel;
@@ -37,7 +39,7 @@ public class SettingsController {
         mView.getCellColorHighField().addColorListener((Color color) -> mModel.setCellColorHigh(color));
         mView.getCellColorLowField().addColorListener((Color color) -> mModel.setCellColorLow(color));
         mView.getInterpolatorComboBox().addActionListener((ActionEvent e) -> {
-            String selected = (String) mView.getInterpolatorComboBox().getSelectedItem();
+            InterpolatorEnum selected = (InterpolatorEnum) mView.getInterpolatorComboBox().getSelectedItem();
             mModel.setInterpolator(selected);
         });
         mView.getIterationsComboBox().addActionListener((ActionEvent e) -> {
@@ -63,8 +65,8 @@ public class SettingsController {
         mView.getBackgroundColorField().setColor(mModel.getBackgroundColor());
         mView.getCellColorHighField().setColor(mModel.getCellColorHigh());
         mView.getCellColorLowField().setColor(mModel.getCellColorLow());
-        JComboBox<String> interpolatorCombo = mView.getInterpolatorComboBox();
-        interpolatorCombo.setModel(new DefaultComboBoxModel<>(new InterpolatorFactory().enumerate()));
+        JComboBox<InterpolatorEnum> interpolatorCombo = mView.getInterpolatorComboBox();
+        interpolatorCombo.setModel(new DefaultComboBoxModel<>(INTERPOLATORS));
         interpolatorCombo.setSelectedItem(mModel.getInterpolator());
         updateGradientPreview();
 
@@ -81,7 +83,7 @@ public class SettingsController {
     private void updateGradientPreview() {
         Color start = mModel.getCellColorHigh();
         Color end = mModel.getCellColorLow();
-        Interpolator inter = mModel.getInterpolator();
+        Interpolator inter = mModel.getInterpolator().toInterpolator();
         mView.getGradientPreview().setGradient(Colors.createHsbGradient(start, end, inter, 20));
     }
 }

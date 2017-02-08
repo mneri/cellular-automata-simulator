@@ -5,6 +5,7 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.Border;
 
+import me.mneri.ca.interpolator.InterpolatorEnum;
 import me.mneri.ca.widget.ColorPreviewTextField;
 import me.mneri.ca.widget.GradientPreview;
 
@@ -16,7 +17,7 @@ public class SettingsView extends JFrame {
     private ColorPreviewTextField mColorLowField;
     private ColorPreviewTextField mBackgroundField;
     private GradientPreview mGradientPreview;
-    private JComboBox<String> mInterpolatorComboBox;
+    private JComboBox<InterpolatorEnum> mInterpolatorComboBox;
     private JComboBox<String> mIterationsComboBox;
 
     public SettingsView() {
@@ -113,7 +114,7 @@ public class SettingsView extends JFrame {
         return mGradientPreview;
     }
 
-    JComboBox<String> getInterpolatorComboBox() {
+    JComboBox<InterpolatorEnum> getInterpolatorComboBox() {
         return mInterpolatorComboBox;
     }
 

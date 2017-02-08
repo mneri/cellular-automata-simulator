@@ -2,6 +2,10 @@ package me.mneri.ca.gui;
 
 import me.mneri.ca.app.Application;
 import me.mneri.ca.app.Settings;
+import me.mneri.ca.drawable.Diagram;
+import me.mneri.ca.drawable.EntropyTimeDiagram;
+import me.mneri.ca.drawable.SpaceTimeDiagram;
+import me.mneri.ca.drawable.DiagramEnum;
 import me.mneri.ca.util.IconFactory;
 import me.mneri.ca.widget.SimulationPanel;
 
@@ -27,15 +31,16 @@ public class SimulationController {
     }
 
     private void attachModelCallbacks() {
-        mModel.addListener(() -> mView.getSimulationPanel().repaint());
+        mModel.addListener(() -> {
+            Diagram diagram = ((DiagramEnum) mView.getDiagramCombo().getSelectedItem()).toDiagram(mModel.getHistory());
+            SimulationPanel simPanel = mView.getSimulationPanel();
+            simPanel.setDiagram(diagram);
+            simPanel.repaint();
+        });
     }
 
     private void attachSettingsCallbacks() {
         Settings settings = Application.instance().getSettings();
-
-        settings.addSettingsListener(() -> {
-            mView.getSimulationPanel().setBackgroundColor(settings.getBackgroundColor());
-        });
     }
 
     private void attachViewCallbacks() {
@@ -45,19 +50,18 @@ public class SimulationController {
                 Application.instance().getSettings().setLocation(mView.getX(), mView.getY());
             }
         });
+        mView.getDiagramCombo().addActionListener((ActionEvent e) -> {
+            Diagram diagram = ((DiagramEnum) mView.getDiagramCombo().getSelectedItem()).toDiagram(mModel.getHistory());
+            SimulationPanel simPanel = mView.getSimulationPanel();
+            simPanel.setDiagram(diagram);
+            simPanel.repaint();
+        });
         mView.getPlayButton().addActionListener((ActionEvent e) -> Application.invokeLater(() -> {
             JButton playButton = mView.getPlayButton();
             IconFactory icons = IconFactory.instance();
 
-            if (mModel.toggle())
-                playButton.setIcon(icons.get("pause.png"));
-            else
-                playButton.setIcon(icons.get("play.png"));
+            mModel.tick(1000);
         }));
-        mView.getStepButton().addActionListener((ActionEvent e) -> Application.invokeLater(() -> mModel.step()));
-        mView.getOpenButton().addActionListener((ActionEvent e) -> {
-
-        });
         mView.getSettingsButton().addActionListener((ActionEvent e) -> {
             SettingsController controller = SettingsController.createMVC(mView);
             controller.showView();
@@ -122,9 +126,12 @@ public class SimulationController {
         else
             mView.setLocationRelativeTo(mParentView);
 
-        SimulationPanel simPanel = mView.getSimulationPanel();
-        simPanel.setBackgroundColor(settings.getBackgroundColor());
-        simPanel.setDiagram(mModel.getDiagram());
+        JComboBox<DiagramEnum> measureCombo = mView.getDiagramCombo();
+        measureCombo.addItem(DiagramEnum.STATE);
+        measureCombo.addItem(DiagramEnum.ENTROPY);
+        measureCombo.addItem(DiagramEnum.JOINT_ENTROPY);
+        measureCombo.addItem(DiagramEnum.CONDITIONAL_ENTROPY);
+        measureCombo.addItem(DiagramEnum.ENTROPY_RATE);
 
         updateZoomButtons();
 

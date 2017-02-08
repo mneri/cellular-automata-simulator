@@ -1,12 +1,12 @@
 package me.mneri.ca.gui;
 
+import java.awt.*;
+import java.util.ArrayList;
+
 import me.mneri.ca.app.Application;
 import me.mneri.ca.app.Settings;
 import me.mneri.ca.interpolator.Interpolator;
-import me.mneri.ca.interpolator.InterpolatorFactory;
-
-import java.awt.*;
-import java.util.ArrayList;
+import me.mneri.ca.interpolator.InterpolatorEnum;
 
 public class SettingsModel {
     public interface Listener {
@@ -32,8 +32,8 @@ public class SettingsModel {
         return mSettings.getCellColorLow();
     }
 
-    public Interpolator getInterpolator() {
-        return new InterpolatorFactory().fromString(mSettings.getInterpolator());
+    public InterpolatorEnum getInterpolator() {
+        return InterpolatorEnum.fromString(mSettings.getInterpolator());
     }
 
     public String getIterations() {
@@ -60,8 +60,8 @@ public class SettingsModel {
         notifyListeners();
     }
 
-    public void setInterpolator(String interpolator) {
-        mSettings.setInterpolator(interpolator);
+    public void setInterpolator(InterpolatorEnum interpolator) {
+        mSettings.setInterpolator(interpolator.toString());
         notifyListeners();
     }
 
