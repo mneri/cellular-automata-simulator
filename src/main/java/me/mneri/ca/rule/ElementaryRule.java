@@ -49,11 +49,14 @@ public class ElementaryRule implements Rule {
          * (that is 5 in decimal). Now, shifting 01101110 to the right of five positions we obtain 00000011. The
          * rightmost bit is the future state of the cell (and then, 00000011 & 1 = 1).
          */
+
+        // Convert the neighbors' states into decimal
         for (int i = 0; i < ARITY; i++) {
             shift <<= 1;
             shift |= states[i];
         }
 
+        // Shift right and get the rightmost bit
         return (mLookup >> shift) & 1;
     }
 }
