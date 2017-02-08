@@ -46,8 +46,8 @@ public class ElementaryRule implements Rule {
          *
          * Here we convert the neighbors' states into a decimal number and then use that number to shift the rule
          * number. For example, say we use rule 110 (01101110 in binary) and our neighborhood has the state 101
-         * (that is 5 in decimal). Now, shifting 01101110 to the right of five positions we obtain 00000011. The
-         * rightmost bit is the future state of the cell (and then, 00000011 & 1 = 1).
+         * (that is 5 in decimal). Now, shifting 01101110 to the right by 5 positions we obtain 00000011. The rightmost
+         * bit is the future state of the cell (and then, 00000011 & 1 = 1).
          */
 
         // Convert the neighbors' states into decimal
