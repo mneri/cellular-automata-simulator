@@ -58,7 +58,7 @@ public class SimulationView extends JFrame {
         toolBar.add(mPlayButton);
 
         toolBar.add(Box.createHorizontalGlue());
-
+        
         mMeasureCombo = new JComboBox<>();
         toolBar.add(mMeasureCombo);
 

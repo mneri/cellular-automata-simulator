@@ -18,7 +18,7 @@ public abstract class Diagram implements Drawable {
     private int mScrollY;
 
     public Diagram(AutomatonHistory history) {
-        this(history, Colors.createHsbGradient(Color.decode("#ff6d00"), Color.decode("#64dd17"), new LinearInterpolator(), 4));
+        this(history, Colors.createHsbGradient(Color.GREEN, Color.RED, new LinearInterpolator(), 4));
     }
 
     public Diagram(AutomatonHistory history, Color[] gradient) {

@@ -21,16 +21,9 @@ public class Test {
         EntropyRateCalculatorDiscrete erCalc = new EntropyRateCalculatorDiscrete(2, 2);
         erCalc.initialise();
 
-        boolean[][] b = new boolean[rows][cols];
+        int[][] matrix = new int[rows][cols];
         AutomatonHistory history = new AutomatonHistory(Automaton.random(new Rule110(), cols));
         history.tick(rows);
-        history.toArray(b);
-        int[][] matrix = new int[rows][cols];
-
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++)
-                matrix[i][j] = b[i][j] ? 1 : 0;
-        }
 
         System.out.printf("Entropy Rate for all k values \n\n");
         double[] er = new double[Math.min(rows, 100)];
