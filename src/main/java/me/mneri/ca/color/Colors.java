@@ -1,7 +1,5 @@
 package me.mneri.ca.color;
 
-import me.mneri.ca.interpolator.Interpolator;
-
 import java.awt.*;
 
 public class Colors {
@@ -11,10 +9,6 @@ public class Colors {
 
     public static Color fromRgbArray(float[] rgb) {
         return new Color(rgb[0], rgb[1], rgb[2]);
-    }
-
-    public static void createRgbGradient(Color start, Color end, Interpolator interpolator, Color[] out) {
-
     }
 
     public static String toHexString(Color color) {
