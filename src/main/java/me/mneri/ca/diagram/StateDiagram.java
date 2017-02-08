@@ -1,9 +1,10 @@
-package me.mneri.ca.drawable;
+package me.mneri.ca.diagram;
 
 import me.mneri.ca.automaton.Automaton;
+import me.mneri.ca.diagram.Diagram;
 
-public class SpaceTimeDiagram extends Diagram {
-    public SpaceTimeDiagram(Automaton history) {
+public class StateDiagram extends Diagram {
+    public StateDiagram(Automaton history) {
         super(history);
     }
 

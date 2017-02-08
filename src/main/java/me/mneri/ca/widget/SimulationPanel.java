@@ -3,7 +3,7 @@ package me.mneri.ca.widget;
 import javax.swing.*;
 import java.awt.*;
 
-import me.mneri.ca.drawable.Diagram;
+import me.mneri.ca.diagram.Diagram;
 
 public class SimulationPanel extends JPanel {
     private static final float[] ZOOM_LEVELS = {1.0f, 2.0f, 3.0f, 4.0f, 6.0f, 8.0f, 10.0f};

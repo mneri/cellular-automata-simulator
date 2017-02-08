@@ -1,6 +1,6 @@
 package me.mneri.ca.gui;
 
-import me.mneri.ca.drawable.DiagramEnum;
+import me.mneri.ca.diagram.DiagramEnum;
 import me.mneri.ca.util.IconFactory;
 import me.mneri.ca.widget.SimulationPanel;
 
@@ -17,7 +17,6 @@ public class SimulationView extends JFrame {
     private JSpinner mRuleSpinner;
     private SimulationPanel mSimulationPanel;
     private JButton mSettingsButton;
-    private JLabel mStatusLabel;
     private JButton mZoomInButton;
     private JButton mZoomOriginalButton;
     private JButton mZoomOutButton;
@@ -35,18 +34,7 @@ public class SimulationView extends JFrame {
         mSimulationPanel = new SimulationPanel();
         add(mSimulationPanel, BorderLayout.CENTER);
 
-        buildStatusbar();
-
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
-    }
-
-    private void buildStatusbar() {
-        JPanel panel = new JPanel();
-        panel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        add(panel, BorderLayout.SOUTH);
-
-        mStatusLabel = new JLabel();
-        panel.add(mStatusLabel);
     }
 
     private void buildToolbar() {
@@ -111,10 +99,6 @@ public class SimulationView extends JFrame {
 
     SimulationPanel getSimulationPanel() {
         return mSimulationPanel;
-    }
-
-    JLabel getStatusLabel() {
-        return mStatusLabel;
     }
 
     JButton getZoomInButton() {

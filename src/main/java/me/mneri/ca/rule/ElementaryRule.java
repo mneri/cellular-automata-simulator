@@ -3,10 +3,13 @@ package me.mneri.ca.rule;
 public class ElementaryRule implements Rule {
     private static final int ARITY = 3;
 
-    private int mLookup;
+    private byte mLookup;
 
     public ElementaryRule(int num) {
-        mLookup = num;
+        if (num < 0 || num > 255)
+            throw new IllegalArgumentException("Rule number should be between 0 and 255.");
+
+        mLookup = (byte) num;
     }
 
     @Override

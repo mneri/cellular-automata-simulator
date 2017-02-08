@@ -1,10 +1,11 @@
-package me.mneri.ca.drawable;
+package me.mneri.ca.diagram;
 
 import me.mneri.ca.automaton.Automaton;
+import me.mneri.ca.diagram.Diagram;
 import me.mneri.ca.measure.Entropy;
 
-public class EntropyTimeDiagram extends Diagram {
-    public EntropyTimeDiagram(Automaton history) {
+public class EntropyDiagram extends Diagram {
+    public EntropyDiagram(Automaton history) {
         super(history);
     }
 

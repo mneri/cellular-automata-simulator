@@ -2,16 +2,13 @@ package me.mneri.ca.gui;
 
 import me.mneri.ca.app.Application;
 import me.mneri.ca.app.Settings;
-import me.mneri.ca.drawable.Diagram;
-import me.mneri.ca.drawable.EntropyTimeDiagram;
-import me.mneri.ca.drawable.SpaceTimeDiagram;
-import me.mneri.ca.drawable.DiagramEnum;
+import me.mneri.ca.diagram.Diagram;
+import me.mneri.ca.diagram.DiagramEnum;
 import me.mneri.ca.util.IconFactory;
 import me.mneri.ca.widget.SimulationPanel;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -59,7 +56,7 @@ public class SimulationController {
             simPanel.repaint();
         });
         mView.getRuleSpinner().addChangeListener((ChangeEvent e) -> {
-            
+
         });
         mView.getPlayButton().addActionListener((ActionEvent e) -> Application.invokeLater(() -> {
             JButton playButton = mView.getPlayButton();
@@ -132,16 +129,9 @@ public class SimulationController {
             mView.setLocationRelativeTo(mParentView);
 
         JComboBox<DiagramEnum> measureCombo = mView.getDiagramCombo();
-        measureCombo.addItem(DiagramEnum.STATE);
-        measureCombo.addItem(DiagramEnum.ENTROPY);
-        measureCombo.addItem(DiagramEnum.JOINT_ENTROPY);
-        measureCombo.addItem(DiagramEnum.CONDITIONAL_ENTROPY);
-        measureCombo.addItem(DiagramEnum.ENTROPY_RATE);
+        measureCombo.setModel(new DefaultComboBoxModel<>(DiagramEnum.values()));
 
         updateZoomButtons();
-
-        JLabel statusLabel = mView.getStatusLabel();
-        statusLabel.setText(" ");
     }
 
     public void showView() {

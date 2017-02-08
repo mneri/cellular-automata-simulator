@@ -1,8 +1,9 @@
-package me.mneri.ca.drawable;
+package me.mneri.ca.diagram;
 
 import java.awt.*;
 
 import me.mneri.ca.automaton.Automaton;
+import me.mneri.ca.drawable.Drawable;
 import me.mneri.ca.interpolator.LinearInterpolator;
 import me.mneri.ca.util.Colors;
 
