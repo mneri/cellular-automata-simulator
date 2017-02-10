@@ -16,9 +16,9 @@ public class AutomatonState {
     }
 
     public static AutomatonState canonical(Rule rule) {
-        AutomatonState automaton = AutomatonState.empty(rule);
-        automaton.mSet.add(0);
-        return automaton;
+        AutomatonState state = AutomatonState.empty(rule);
+        state.mSet.add(0);
+        return state;
     }
 
     public static AutomatonState empty(Rule rule) {
@@ -71,22 +71,43 @@ public class AutomatonState {
         return concerned;
     }
 
-    public static AutomatonState random(Rule rule, int size) {
-        AutomatonState automaton = AutomatonState.empty(rule);
-        Random random = ThreadLocalRandom.current();
+    public static AutomatonState pattern(Rule rule, int[] values) {
+        AutomatonState state = AutomatonState.empty(rule);
+        int size = values.length;
 
-        for (int i = -size / 2; i < size / 2; i++) {
-            if (random.nextBoolean())
-                automaton.mSet.add(i);
+        for (int i = 0; i < size; i++) {
+            if (values[i] == 1)
+                state.mSet.add(i - (size / 2));
         }
 
-        return automaton;
+        return state;
+    }
+
+    public static AutomatonState random(Rule rule, int size) {
+        AutomatonState state = AutomatonState.empty(rule);
+        Random random = ThreadLocalRandom.current();
+
+        for (int i = 0; i < size; i++) {
+            if (random.nextBoolean())
+                state.mSet.add(i - (size / 2));
+        }
+
+        return state;
+    }
+
+    public static AutomatonState repeat(Rule rule, int[] pattern, int size) {
+        int[] values = new int[size];
+
+        for (int i = 0; i < size; i++)
+            values[i] = pattern[i % size];
+
+        return AutomatonState.pattern(rule, values);
     }
 
     public void toArray(int[] out) {
         int size = out.length;
 
         for (int i = 0; i < size; i++)
-            out[i] = get(i - size / 2);
+            out[i] = get(i - (size / 2));
     }
 }
