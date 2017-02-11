@@ -22,7 +22,8 @@ public class Test {
         int[][] matrix = new int[rows][cols];
         Automaton history = new Automaton(AutomatonState.random(new ElementaryRule(110), cols));
         history.tick(rows);
-
+        history.toArray(matrix);
+        
         System.out.printf("Entropy Rate for all k values \n\n");
         double[] er = new double[Math.min(rows, 100)];
         for (int i = 0; i < rows && i < 100; i++) {
