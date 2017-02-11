@@ -5,12 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-
 import javax.swing.JPanel;
-import javax.swing.JToolTip;
 
 public class Graphic extends JPanel {
 
@@ -44,7 +39,7 @@ public class Graphic extends JPanel {
 
         int nsegx = 20;
         int nsegy = 40;
-        int nstepy = 100;
+        int nstepy = 30;
 
         int xStepSize = (sizex - (2 * padding)) / nsegx;
         int yStepSize = (sizey - (2 * padding)) / nsegy;
@@ -72,8 +67,8 @@ public class Graphic extends JPanel {
             g.drawLine(padding - 2, y - index, padding + 2, y - index);
             g.drawLine(padding - 2, y + index, padding + 2, y + index);
             if (i % (nsegy / 10) == 0) {
-                g.drawString("" + (double) i / nstepy, padding / 2 - 5, y - index + 5);
-                g.drawString("" + (double) -i / nstepy, padding / 2 - 5, y + index + 5);
+                g.drawString(String.format("%.2f",(double) i / nstepy), padding / 2 - 5, y - index + 5);
+                g.drawString(String.format("%.2f",(double) -i / nstepy), padding / 2 - 5, y + index + 5);
             }
             index += yStepSize;
         }
@@ -94,15 +89,15 @@ public class Graphic extends JPanel {
             g.drawLine(index - xStepSize, y + negated * (int) (vett[i - 1] * yStepSize), index,
                     y + negated * (int) (vett[i] * yStepSize));
 
-            if (i <= 10) {
-                g.setColor(Color.LIGHT_GRAY);
-                g.drawLine(index, y + negated * (int) (vett[i] * yStepSize), padding,
-                        y + negated * (int) (vett[i] * yStepSize));
-                // g.drawLine(index, y + negated * (int) (vett[i] * yStepSize),
-                // index, y);
-
-                g.setColor(Color.RED);
-            }
+//            if (i <= 10) {
+//                g.setColor(Color.LIGHT_GRAY);
+//                g.drawLine(index, y + negated * (int) (vett[i] * yStepSize), padding,
+//                        y + negated * (int) (vett[i] * yStepSize));
+//                // g.drawLine(index, y + negated * (int) (vett[i] * yStepSize),
+//                // index, y);
+//
+//                g.setColor(Color.RED);
+//            }
 
             index += xStepSize;
         }

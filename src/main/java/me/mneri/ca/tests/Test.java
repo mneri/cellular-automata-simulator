@@ -20,7 +20,7 @@ public class Test {
         erCalc.initialise();
 
         int[][] matrix = new int[rows][cols];
-        Automaton history = new Automaton(AutomatonState.random(new ElementaryRule(110), cols));
+        Automaton history = new Automaton(AutomatonState.random(new ElementaryRule(170), cols));
         history.tick(rows);
         history.toArray(matrix);
         
