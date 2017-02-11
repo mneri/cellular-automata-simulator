@@ -14,7 +14,7 @@ public class EntropyRateDiagram extends Diagram {
         int[][] state = new int[1024][1024];
 
         history.toArray(state);
-        double[][] data = Entropy.localEntropyRate(state, 4);
+        double[][] data = Entropy.localBlockEntropy(state, 4);
 
         return data;
     }

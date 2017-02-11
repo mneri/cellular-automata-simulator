@@ -122,7 +122,7 @@ public class Test {
     }
 
     @org.junit.Test
-    public void localEntropyRate() {
+    public void localBlockEntropy() {
 
         int[][] matrix = new int[len][2];
         double[][] res = new double[len][2];
@@ -135,7 +135,7 @@ public class Test {
         }
 
         // calculate entropy rate
-        res = Entropy.localEntropyRate(matrix, 2);
+        res = Entropy.localBlockEntropy(matrix, 2);
 
         // transpose result matrix
         for (int i = 0; i < len; i++) {
@@ -148,7 +148,7 @@ public class Test {
     }
 
     @org.junit.Test
-    public void averagedEntropyRate() {
+    public void averagedBlockEntropy() {
         
         int[][] matrix = new int[len][2];
         // create input matrix
@@ -157,7 +157,7 @@ public class Test {
             matrix[i][1] = streamY[i];
         }
         
-        double res = Entropy.averagedEntropyRate(matrix, 2);
+        double res = Entropy.averagedBlockEntropy(matrix, 2);
         
         assertEquals(res, erCalc.computeAverageLocal(matrix), 0.000001);
     }

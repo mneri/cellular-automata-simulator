@@ -117,7 +117,7 @@ public class Entropy {
     }
 
     // calculate local conditional entropy given two data streams
-    public static double[][] localEntropyRate(int[][] matrix, int k) {
+    public static double[][] localBlockEntropy(int[][] matrix, int k) {
 
         int rows = matrix.length;
         int cols = matrix[0].length;
@@ -177,7 +177,7 @@ public class Entropy {
     }
 
     // calculate excess entropy
-    public static double averagedEntropyRate(int[][] matrix, int k) {
+    public static double averagedBlockEntropy(int[][] matrix, int k) {
         double res = 0.0;
         int rows = matrix.length;
         int cols = matrix[0].length;
@@ -230,7 +230,7 @@ public class Entropy {
 
     // return an array of differences of crescent k-entropy rate
     // or second differences
-    public static double[] derivedEntropyRate(int[][] matrix, int liv) {
+    public static double[] derivedBlockEntropy(int[][] matrix, int liv) {
 
         int rows = matrix.length;
 
@@ -239,7 +239,7 @@ public class Entropy {
 
         for (int i = 1; i < rows; i++) {
             // calculate first differences
-            der1[i - 1] = averagedEntropyRate(matrix, i) - averagedEntropyRate(matrix, i - 1);
+            der1[i - 1] = averagedBlockEntropy(matrix, i) - averagedBlockEntropy(matrix, i - 1);
 
             // calculate the seconds
             if (i > 1)
@@ -252,8 +252,8 @@ public class Entropy {
             return der2;
     }
 
-    public static double[] derivedEntropyRate(int[][] matrix) {
-        return derivedEntropyRate(matrix, 1);
+    public static double[] derivedBlockEntropy(int[][] matrix) {
+        return derivedBlockEntropy(matrix, 1);
     }
 
     // calculate single value occurrences in a stream
