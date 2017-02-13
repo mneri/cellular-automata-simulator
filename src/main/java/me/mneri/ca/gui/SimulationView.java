@@ -1,8 +1,8 @@
 package me.mneri.ca.gui;
 
-import me.mneri.ca.diagram.DiagramEnum;
+import me.mneri.ca.diagram.Diagram;
 import me.mneri.ca.util.IconFactory;
-import me.mneri.ca.widget.SimulationPanel;
+import me.mneri.ca.widget.DisplayPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,12 +10,13 @@ import java.awt.*;
 public class SimulationView extends JFrame {
     private static final int FRAME_HEIGHT = 540;
     private static final int FRAME_WIDTH = 960;
+    private static final int SPACE_LARGE = 8;
+    private static final int SPACE_SMALL = 4;
 
     private JSpinner mKSpinner;
-    JComboBox<DiagramEnum> mMeasureCombo;
-    private JButton mPlayButton;
+    private JComboBox<Diagram.Enum> mMeasureCombo;
     private JSpinner mRuleSpinner;
-    private SimulationPanel mSimulationPanel;
+    private DisplayPanel mDisplayPanel;
     private JButton mSettingsButton;
     private JButton mZoomInButton;
     private JButton mZoomOriginalButton;
@@ -31,8 +32,8 @@ public class SimulationView extends JFrame {
 
         buildToolbar();
 
-        mSimulationPanel = new SimulationPanel();
-        add(mSimulationPanel, BorderLayout.CENTER);
+        mDisplayPanel = new DisplayPanel();
+        add(mDisplayPanel, BorderLayout.CENTER);
 
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
     }
@@ -44,19 +45,23 @@ public class SimulationView extends JFrame {
         toolBar.setFloatable(false);
         add(toolBar, BorderLayout.NORTH);
 
-        mPlayButton = new JButton(icons.get("play.png"));
-        toolBar.add(mPlayButton);
-
         toolBar.add(Box.createHorizontalGlue());
 
+        toolBar.add(new JLabel("Rule:"));
+        toolBar.add(Box.createHorizontalStrut(SPACE_SMALL));
         mRuleSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 255, 1));
         toolBar.add(mRuleSpinner);
 
         toolBar.addSeparator();
-        
+
+        toolBar.add(new JLabel("Diagram:"));
+        toolBar.add(Box.createHorizontalStrut(SPACE_SMALL));
         mMeasureCombo = new JComboBox<>();
         toolBar.add(mMeasureCombo);
 
+        toolBar.add(Box.createHorizontalStrut(SPACE_LARGE));
+        toolBar.add(new JLabel("k:"));
+        toolBar.add(Box.createHorizontalStrut(SPACE_SMALL));
         mKSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 255, 1));
         toolBar.add(mKSpinner);
 
@@ -77,16 +82,12 @@ public class SimulationView extends JFrame {
         toolBar.add(mSettingsButton);
     }
 
-    JComboBox<DiagramEnum> getDiagramCombo() {
+    JComboBox<Diagram.Enum> getDiagramCombo() {
         return mMeasureCombo;
     }
 
     JSpinner getKSpinner() {
         return mKSpinner;
-    }
-
-    JButton getPlayButton() {
-        return mPlayButton;
     }
 
     JSpinner getRuleSpinner() {
@@ -97,8 +98,8 @@ public class SimulationView extends JFrame {
         return mSettingsButton;
     }
 
-    SimulationPanel getSimulationPanel() {
-        return mSimulationPanel;
+    DisplayPanel getDisplayPanel() {
+        return mDisplayPanel;
     }
 
     JButton getZoomInButton() {

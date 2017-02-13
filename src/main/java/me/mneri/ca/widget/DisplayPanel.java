@@ -1,14 +1,16 @@
 package me.mneri.ca.widget;
 
+import me.mneri.ca.diagram.Diagram;
+
 import javax.swing.*;
 import java.awt.*;
 
-import me.mneri.ca.diagram.Diagram;
-
-public class SimulationPanel extends JPanel {
+public class DisplayPanel extends JPanel {
     private static final float[] ZOOM_LEVELS = {1.0f, 2.0f, 3.0f, 4.0f, 6.0f, 8.0f, 10.0f};
 
     private Diagram mDiagram;
+    private int mLastScrollX;
+    private int mLastScrollY;
     private int mScrollX;
     private int mScrollY;
     private int mZoomIndex;
@@ -27,19 +29,24 @@ public class SimulationPanel extends JPanel {
 
     @Override
     protected void paintComponent(Graphics graphics) {
-        Graphics2D g = (Graphics2D) graphics;
+        if (mDiagram == null)
+            return;
 
-        if (mDiagram != null)
-            mDiagram.paint(g, getWidth(), getHeight());
+        Graphics2D g = (Graphics2D) graphics;
+        mDiagram.paint(g, 0, 0, getWidth(), getHeight());
     }
 
     public void scroll(int dx, int dy) {
-        if (mDiagram != null) {
-            mDiagram.scroll(dx, dy);
-            mScrollX = mDiagram.getScrollX();
-            mScrollY = mDiagram.getScrollY();
-            repaint();
-        }
+        if (mDiagram == null)
+            return;
+
+        mDiagram.scroll(dx, dy);
+        mLastScrollX = mScrollX;
+        mLastScrollY = mScrollY;
+        mScrollX = mDiagram.getScrollX();
+        mScrollY = mDiagram.getScrollY();
+
+        repaint();
     }
 
     public void setDiagram(Diagram diagram) {
@@ -49,10 +56,11 @@ public class SimulationPanel extends JPanel {
     }
 
     private void setScale(float scale) {
-        if (mDiagram != null) {
-            mDiagram.setScale(scale);
-            repaint();
-        }
+        if (mDiagram == null)
+            return;
+
+        mDiagram.setScale(scale);
+        repaint();
     }
 
     public void zoomIn() {

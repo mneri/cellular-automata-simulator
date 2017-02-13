@@ -12,15 +12,15 @@ public class SimulationModel {
         void onUpdate();
     }
 
-    private Automaton mHistory = new Automaton(AutomatonState.random(new ElementaryRule(110), 1024));
+    private Automaton mAutomaton;
     private List<Listener> mListeners = new ArrayList<>();
 
     public void addListener(Listener listener) {
         mListeners.add(listener);
     }
 
-    public Automaton getHistory() {
-        return mHistory;
+    public Automaton getAutomaton() {
+        return mAutomaton;
     }
 
     private void notifyListeners() {
@@ -32,10 +32,8 @@ public class SimulationModel {
         mListeners.remove(listener);
     }
 
-    public void tick(int n) {
-        (new Thread(() -> {
-            mHistory.tick(n);
-            notifyListeners();
-        })).start();
+    public void setAutomaton(Automaton automaton) {
+        mAutomaton = automaton;
+        notifyListeners();
     }
 }
