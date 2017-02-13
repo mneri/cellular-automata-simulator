@@ -12,7 +12,7 @@ public class Test {
 
     public static void main(String[] args) throws Exception {
 
-        int rows = 1200;
+        int rows = 800;
         int cols = 200;
         int maxStep = 101;
 
@@ -21,7 +21,7 @@ public class Test {
         erCalc.initialise();
 
         int[][] matrix = new int[rows][cols];
-        int rule = 173;
+        int rule = 54;
         Automaton history = new Automaton(AutomatonState.random(new ElementaryRule(rule), cols));
         history.tick(rows);
         history.toArray(matrix);
@@ -39,7 +39,7 @@ public class Test {
 
         // graph
         JFrame jf4 = new JFrame();
-        Graphic panel4 = new Graphic(er, false, "Block Entropy for each k from 0 to rows", rule);
+        Graphic panel4 = new Graphic(er, false, "Block Entropy for each k", rule);
         panel4.setVisible(true);
         jf4.add(panel4);
         jf4.setVisible(true);
@@ -56,7 +56,7 @@ public class Test {
 
         // graph
         JFrame jf = new JFrame();
-        Graphic panel = new Graphic(er, false, "Derived (1 times) H(k) for each k from 0 to rows", rule);
+        Graphic panel = new Graphic(er, false, "Derived (1 times) H(k) for each k", rule);
         panel.setVisible(true);
         jf.add(panel);
         jf.setVisible(true);
@@ -73,7 +73,7 @@ public class Test {
 
         // graph
         JFrame jf2 = new JFrame();
-        Graphic panel2 = new Graphic(er, false, "Derived (2 times) H(k) for each k from 0 to rows", rule);
+        Graphic panel2 = new Graphic(er, false, "Derived (2 times) H(k) for each k ", rule);
         panel2.setVisible(true);
         jf2.add(panel2);
         jf2.setVisible(true);

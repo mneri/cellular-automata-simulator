@@ -34,16 +34,17 @@ public class Graphic extends JPanel {
 
         Font font = getFont();
         g.setFont(new Font("default", Font.BOLD, 20));
-        g.drawString(str + "    RULE: " + srule, sizex / 3 - 0, padding / 2);
+        g.drawString(str, sizex / 3 - 0, padding / 2);
+        g.drawString("RULE: " + srule, sizex / 2 - 0, padding / 2 + 30);
 
         g.setFont(font);
 
         int y = sizey / 2;
         int index = padding;
 
-        int rowsX = 100;
+        int rowsX = 50;
         int rowsY = 40;
-        int nStepY = 30;
+        int nStepY = 40;
 
         int xStepSize = (sizex - (2 * padding)) / rowsX;
         int yStepSize = (sizey - (2 * padding)) / rowsY;
