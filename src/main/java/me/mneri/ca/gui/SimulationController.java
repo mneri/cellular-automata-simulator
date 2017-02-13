@@ -6,7 +6,7 @@ import me.mneri.ca.automaton.Automaton;
 import me.mneri.ca.automaton.AutomatonState;
 import me.mneri.ca.color.HsbGradient;
 import me.mneri.ca.diagram.*;
-import me.mneri.ca.rule.ElementaryRule;
+import me.mneri.ca.automaton.ElementaryRule;
 import me.mneri.ca.widget.DisplayPanel;
 
 import javax.swing.*;

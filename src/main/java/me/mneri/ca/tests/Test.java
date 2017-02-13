@@ -5,7 +5,7 @@ import infodynamics.measures.discrete.EntropyRateCalculatorDiscrete;
 import me.mneri.ca.automaton.AutomatonState;
 import me.mneri.ca.automaton.Automaton;
 import me.mneri.ca.measure.Entropy;
-import me.mneri.ca.rule.ElementaryRule;
+import me.mneri.ca.automaton.ElementaryRule;
 import me.mneri.ca.widget.Graphic;
 
 public class Test {

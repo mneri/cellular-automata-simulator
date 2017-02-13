@@ -4,8 +4,6 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
-import me.mneri.ca.rule.Rule;
-
 public class AutomatonState {
     private int mDefault;
     private Rule mRule;

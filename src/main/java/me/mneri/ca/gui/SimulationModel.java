@@ -3,9 +3,7 @@ package me.mneri.ca.gui;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.mneri.ca.automaton.AutomatonState;
 import me.mneri.ca.automaton.Automaton;
-import me.mneri.ca.rule.*;
 
 public class SimulationModel {
     public interface Listener {
