@@ -1,4 +1,4 @@
-package me.mneri.ca.rule;
+package me.mneri.ca.automaton;
 
 public class ElementaryRule implements Rule {
     private static final int ARITY = 3;
