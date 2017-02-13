@@ -1,6 +1,6 @@
 package me.mneri.ca.gui;
 
-import me.mneri.ca.diagram.DiagramEnum;
+import me.mneri.ca.diagram.Diagram;
 import me.mneri.ca.util.IconFactory;
 import me.mneri.ca.widget.DisplayPanel;
 
@@ -14,7 +14,7 @@ public class SimulationView extends JFrame {
     private static final int SPACE_SMALL = 4;
 
     private JSpinner mKSpinner;
-    private JComboBox<DiagramEnum> mMeasureCombo;
+    private JComboBox<Diagram.Enum> mMeasureCombo;
     private JSpinner mRuleSpinner;
     private DisplayPanel mDisplayPanel;
     private JButton mSettingsButton;
@@ -82,7 +82,7 @@ public class SimulationView extends JFrame {
         toolBar.add(mSettingsButton);
     }
 
-    JComboBox<DiagramEnum> getDiagramCombo() {
+    JComboBox<Diagram.Enum> getDiagramCombo() {
         return mMeasureCombo;
     }
 

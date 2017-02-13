@@ -1,14 +1,15 @@
 package me.mneri.ca.diagram;
 
 import java.awt.*;
+import java.util.Collections;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import me.mneri.ca.automaton.Automaton;
 import me.mneri.ca.color.Gradient;
-import me.mneri.ca.color.HsbGradient;
 import me.mneri.ca.draw.Paintable;
-import me.mneri.ca.interpolator.LinearInterpolator;
 
-public abstract class Diagram implements Paintable {
+public class Diagram implements Paintable {
     private static final int CELL_HEIGHT = 1;
     private static final int CELL_WIDTH = 1;
 
@@ -19,13 +20,97 @@ public abstract class Diagram implements Paintable {
     private int mScrollX;
     private int mScrollY;
 
-    public Diagram(Automaton history) {
-        this(history, new HsbGradient(Color.GREEN, Color.RED, new LinearInterpolator(), 4));
+    public static class Builder {
+        Automaton automaton;
+        Gradient gradient;
+        int height;
+        Preprocessor preprocessor;
+        float scale = 1.0f;
+        int scrollX;
+        int scrollY;
+        int width;
+
+        public Diagram build() {
+            return new Diagram(this);
+        }
+
+        public Builder setAutomaton(Automaton automaton) {
+            this.automaton = automaton;
+            return this;
+        }
+
+        public Builder setGradient(Gradient gradient) {
+            this.gradient = gradient;
+            return this;
+        }
+
+        public Builder setPreprocessor(Preprocessor preprocessor) {
+            this.preprocessor = preprocessor;
+            return this;
+        }
+
+        public Builder setScale(float scale) {
+            this.scale = scale;
+            return this;
+        }
+
+        public Builder setScroll(int scrollX, int scrollY) {
+            this.scrollX = scrollX;
+            this.scrollY = scrollY;
+            return this;
+        }
+
+        public Builder setSize(int width, int height) {
+            this.width = width;
+            this.height = height;
+            return this;
+        }
     }
 
-    public Diagram(Automaton history, Gradient gradient) {
-        mData = prepare(history);
-        mGradient = gradient;
+    public enum Enum {
+        STATE("State"),
+        ENTROPY("Entropy"),
+        JOINT_ENTROPY("Joint Entropy"),
+        CONDITIONAL_ENTROPY("Conditional Entropy"),
+        ENTROPY_RATE("Entropy Rate");
+
+        private static final Map<String, Enum> STRING_ENUM_MAP;
+
+        private String mName;
+
+        Enum(String name) {
+            mName = name;
+        }
+
+        public Enum get(String name) {
+            return STRING_ENUM_MAP.get(name);
+        }
+
+        @Override
+        public String toString() {
+            return mName;
+        }
+
+        static {
+            Map<String, Enum> map = new ConcurrentHashMap<>();
+
+            for (Enum value : Enum.values())
+                map.put(value.toString(), value);
+
+            STRING_ENUM_MAP = Collections.unmodifiableMap(map);
+        }
+    }
+
+    public interface Preprocessor {
+        double[][] exec(Automaton automaton, int width, int height);
+    }
+
+    private Diagram(Builder builder) {
+        mData = builder.preprocessor.exec(builder.automaton, builder.width, builder.height);
+        mGradient = builder.gradient;
+        mScale = builder.scale;
+        mScrollX = builder.scrollX;
+        mScrollY = builder.scrollY;
     }
 
     public int getScrollX() {
@@ -63,8 +148,6 @@ public abstract class Diagram implements Paintable {
             }
         }
     }
-
-    protected abstract double[][] prepare(Automaton history);
 
     public void scroll(int dx, int dy) {
         setScroll(mScrollX + dx, mScrollY + dy);

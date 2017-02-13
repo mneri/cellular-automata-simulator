@@ -1,18 +1,17 @@
 package me.mneri.ca.gui;
 
-import java.awt.*;
-import java.awt.event.*;
-
-import javax.swing.*;
-
 import me.mneri.ca.app.Application;
 import me.mneri.ca.app.Settings;
 import me.mneri.ca.automaton.Automaton;
 import me.mneri.ca.automaton.AutomatonState;
-import me.mneri.ca.diagram.Diagram;
-import me.mneri.ca.diagram.DiagramEnum;
+import me.mneri.ca.color.HsbGradient;
+import me.mneri.ca.diagram.*;
 import me.mneri.ca.rule.ElementaryRule;
 import me.mneri.ca.widget.DisplayPanel;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 
 public class SimulationController {
     private int mLastDragX;
@@ -32,12 +31,7 @@ public class SimulationController {
     }
 
     private void attachModelCallbacks() {
-        mModel.addListener(() -> {
-            Diagram diagram = ((DiagramEnum) mView.getDiagramCombo().getSelectedItem()).toDiagram(mModel.getAutomaton());
-            DisplayPanel simPanel = mView.getDisplayPanel();
-            simPanel.setDiagram(diagram);
-            simPanel.repaint();
-        });
+        mModel.addListener(this::updateDiagram);
     }
 
     private void attachSettingsCallbacks() {
@@ -52,23 +46,7 @@ public class SimulationController {
             }
         });
         mView.getDiagramCombo().addActionListener((ActionEvent e) -> {
-            Diagram diagram = ((DiagramEnum) mView.getDiagramCombo().getSelectedItem()).toDiagram(mModel.getAutomaton());
-            DisplayPanel simPanel = mView.getDisplayPanel();
-            simPanel.setDiagram(diagram);
-            simPanel.repaint();
-        });
-        mView.getRuleSpinner().addChangeListener(changeEvent -> {
-            int rule = (int) mView.getRuleSpinner().getValue();
-            Automaton automaton = new Automaton(AutomatonState.random(new ElementaryRule(rule), 1024));
-
-            new Thread(() -> {
-                automaton.tick(1024);
-                SwingUtilities.invokeLater(() -> mModel.setAutomaton(automaton));
-            }).start();
-        });
-        mView.getSettingsButton().addActionListener((ActionEvent e) -> {
-            SettingsController controller = SettingsController.createMVC(mView);
-            controller.showView();
+            updateDiagram();
         });
         mView.getDisplayPanel().addMouseListener(new MouseAdapter() {
             @Override
@@ -92,6 +70,22 @@ public class SimulationController {
                 mLastDragX = x;
                 mLastDragY = y;
             }
+        });
+        mView.getKSpinner().addChangeListener(changeEvent -> {
+            updateDiagram();
+        });
+        mView.getRuleSpinner().addChangeListener(changeEvent -> {
+            int rule = (int) mView.getRuleSpinner().getValue();
+            Automaton automaton = new Automaton(AutomatonState.random(new ElementaryRule(rule), 1024));
+
+            new Thread(() -> {
+                automaton.tick(1024);
+                SwingUtilities.invokeLater(() -> mModel.setAutomaton(automaton));
+            }).start();
+        });
+        mView.getSettingsButton().addActionListener((ActionEvent e) -> {
+            SettingsController controller = SettingsController.createMVC(mView);
+            controller.showView();
         });
         mView.getZoomInButton().addActionListener((ActionEvent e) -> {
             mView.getDisplayPanel().zoomIn();
@@ -130,14 +124,56 @@ public class SimulationController {
         else
             mView.setLocationRelativeTo(mParentView);
 
-        JComboBox<DiagramEnum> measureCombo = mView.getDiagramCombo();
-        measureCombo.setModel(new DefaultComboBoxModel<>(DiagramEnum.values()));
+        int rule = (Integer) mView.getRuleSpinner().getValue();
+        mModel.setAutomaton(new Automaton(AutomatonState.random(new ElementaryRule(rule), 1024)));
 
+        JComboBox<Diagram.Enum> diagramCombo = mView.getDiagramCombo();
+        diagramCombo.setModel(new DefaultComboBoxModel<>(Diagram.Enum.values()));
+
+        updateDiagram();
         updateZoomButtons();
     }
 
     public void showView() {
         mView.setVisible(true);
+    }
+
+    private void updateDiagram() {
+        Diagram.Enum type = (Diagram.Enum) mView.getDiagramCombo().getSelectedItem();
+        Diagram.Preprocessor preproc;
+
+        switch (type) {
+            case CONDITIONAL_ENTROPY:
+                preproc = new ConditionalEntropyPreprocessor();
+                break;
+            case ENTROPY:
+                preproc = new EntropyPreprocessor();
+                break;
+            case ENTROPY_RATE:
+                preproc = new EntropyRatePreprocessor((Integer) mView.getKSpinner().getValue());
+                break;
+            case JOINT_ENTROPY:
+                preproc = new JointEntropyPreprocessor();
+                break;
+            case STATE:
+                preproc = new StatePreprocessor();
+                break;
+            default:
+                throw new IllegalArgumentException();
+        }
+
+        Diagram diagram = new Diagram.Builder()
+                .setAutomaton(mModel.getAutomaton())
+                .setGradient(new HsbGradient(Color.GREEN, Color.RED))
+                .setPreprocessor(preproc)
+                .setSize(1024, 1024)
+                .build();
+
+        DisplayPanel simPanel = mView.getDisplayPanel();
+        simPanel.setDiagram(diagram);
+        simPanel.repaint();
+
+        mView.getKSpinner().setEnabled(type == Diagram.Enum.ENTROPY_RATE);
     }
 
     private void updateZoomButtons() {

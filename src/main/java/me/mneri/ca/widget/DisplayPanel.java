@@ -8,7 +8,6 @@ import java.awt.*;
 public class DisplayPanel extends JPanel {
     private static final float[] ZOOM_LEVELS = {1.0f, 2.0f, 3.0f, 4.0f, 6.0f, 8.0f, 10.0f};
 
-    private Image mBufferedImage;
     private Diagram mDiagram;
     private int mLastScrollX;
     private int mLastScrollY;
