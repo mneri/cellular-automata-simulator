@@ -5,15 +5,16 @@ import java.awt.*;
 import me.mneri.ca.automaton.Automaton;
 import me.mneri.ca.color.Gradient;
 import me.mneri.ca.color.HsbGradient;
-import me.mneri.ca.drawable.Drawable;
+import me.mneri.ca.draw.Paintable;
 import me.mneri.ca.interpolator.LinearInterpolator;
 
-public abstract class Diagram implements Drawable {
+public abstract class Diagram implements Paintable {
     private static final int CELL_HEIGHT = 1;
     private static final int CELL_WIDTH = 1;
 
-    private Gradient mGradient;
     private double[][] mData;
+    private Gradient mGradient;
+    private float mGradientScale = 1.0f;
     private float mScale = 1.0f;
     private int mScrollX;
     private int mScrollY;
@@ -35,7 +36,7 @@ public abstract class Diagram implements Drawable {
         return mScrollY;
     }
 
-    public void paint(Graphics2D g, int canvasWidth, int canvasHeight) {
+    public void paint(Graphics2D g, int x, int y, int canvasWidth, int canvasHeight) {
         g.scale(mScale, mScale);
 
         canvasWidth = (int) Math.ceil(canvasWidth / mScale);  // canvasWidth = canvasWidth * (1 / mScale)
@@ -51,10 +52,12 @@ public abstract class Diagram implements Drawable {
 
         for (int i = gridTop; i < gridBottom; i++) {
             for (int j = gridLeft; j < gridRight; j++) {
-                if (i > 0 && j > 0 && i < dataHeight && j < dataWidth)
-                    g.setColor(mGradient.get(Math.min(1.0, mData[i][j]))); // TODO: data can be higher than 1
-                else
+                if (i > 0 && j > 0 && i < dataHeight && j < dataWidth) {
+                    double value = Math.min(1.0, mData[i][j] * mGradientScale);
+                    g.setColor(mGradient.get(value));
+                } else {
                     g.setColor(mGradient.get(0.0));
+                }
 
                 g.fillRect(j - gridLeft, i - gridTop, CELL_WIDTH, CELL_HEIGHT);
             }
@@ -65,6 +68,10 @@ public abstract class Diagram implements Drawable {
 
     public void scroll(int dx, int dy) {
         setScroll(mScrollX + dx, mScrollY + dy);
+    }
+
+    public void setGradientScale(float scale) {
+        mGradientScale = scale;
     }
 
     public void setScale(float scale) {

@@ -1,16 +1,18 @@
 package me.mneri.ca.gui;
 
-import me.mneri.ca.app.Application;
-import me.mneri.ca.app.Settings;
-import me.mneri.ca.diagram.Diagram;
-import me.mneri.ca.diagram.DiagramEnum;
-import me.mneri.ca.util.IconFactory;
-import me.mneri.ca.widget.SimulationPanel;
-
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
 import java.awt.*;
 import java.awt.event.*;
+
+import javax.swing.*;
+
+import me.mneri.ca.app.Application;
+import me.mneri.ca.app.Settings;
+import me.mneri.ca.automaton.Automaton;
+import me.mneri.ca.automaton.AutomatonState;
+import me.mneri.ca.diagram.Diagram;
+import me.mneri.ca.diagram.DiagramEnum;
+import me.mneri.ca.rule.ElementaryRule;
+import me.mneri.ca.widget.DisplayPanel;
 
 public class SimulationController {
     private int mLastDragX;
@@ -31,8 +33,8 @@ public class SimulationController {
 
     private void attachModelCallbacks() {
         mModel.addListener(() -> {
-            Diagram diagram = ((DiagramEnum) mView.getDiagramCombo().getSelectedItem()).toDiagram(mModel.getHistory());
-            SimulationPanel simPanel = mView.getSimulationPanel();
+            Diagram diagram = ((DiagramEnum) mView.getDiagramCombo().getSelectedItem()).toDiagram(mModel.getAutomaton());
+            DisplayPanel simPanel = mView.getDisplayPanel();
             simPanel.setDiagram(diagram);
             simPanel.repaint();
         });
@@ -50,25 +52,25 @@ public class SimulationController {
             }
         });
         mView.getDiagramCombo().addActionListener((ActionEvent e) -> {
-            Diagram diagram = ((DiagramEnum) mView.getDiagramCombo().getSelectedItem()).toDiagram(mModel.getHistory());
-            SimulationPanel simPanel = mView.getSimulationPanel();
+            Diagram diagram = ((DiagramEnum) mView.getDiagramCombo().getSelectedItem()).toDiagram(mModel.getAutomaton());
+            DisplayPanel simPanel = mView.getDisplayPanel();
             simPanel.setDiagram(diagram);
             simPanel.repaint();
         });
-        mView.getRuleSpinner().addChangeListener((ChangeEvent e) -> {
+        mView.getRuleSpinner().addChangeListener(changeEvent -> {
+            int rule = (int) mView.getRuleSpinner().getValue();
+            Automaton automaton = new Automaton(AutomatonState.random(new ElementaryRule(rule), 1024));
 
+            new Thread(() -> {
+                automaton.tick(1024);
+                SwingUtilities.invokeLater(() -> mModel.setAutomaton(automaton));
+            }).start();
         });
-        mView.getPlayButton().addActionListener((ActionEvent e) -> Application.invokeLater(() -> {
-            JButton playButton = mView.getPlayButton();
-            IconFactory icons = IconFactory.instance();
-
-            mModel.tick(1000);
-        }));
         mView.getSettingsButton().addActionListener((ActionEvent e) -> {
             SettingsController controller = SettingsController.createMVC(mView);
             controller.showView();
         });
-        mView.getSimulationPanel().addMouseListener(new MouseAdapter() {
+        mView.getDisplayPanel().addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 mView.setCursor(new Cursor(Cursor.MOVE_CURSOR));
@@ -81,26 +83,26 @@ public class SimulationController {
                 mView.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         });
-        mView.getSimulationPanel().addMouseMotionListener(new MouseMotionAdapter() {
+        mView.getDisplayPanel().addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
                 int x = e.getX();
                 int y = e.getY();
-                mView.getSimulationPanel().scroll(mLastDragX - x, mLastDragY - y);
+                mView.getDisplayPanel().scroll(mLastDragX - x, mLastDragY - y);
                 mLastDragX = x;
                 mLastDragY = y;
             }
         });
         mView.getZoomInButton().addActionListener((ActionEvent e) -> {
-            mView.getSimulationPanel().zoomIn();
+            mView.getDisplayPanel().zoomIn();
             updateZoomButtons();
         });
         mView.getZoomOriginalButton().addActionListener((ActionEvent e) -> {
-            mView.getSimulationPanel().zoomOriginal();
+            mView.getDisplayPanel().zoomOriginal();
             updateZoomButtons();
         });
         mView.getZoomOutButton().addActionListener((ActionEvent e) -> {
-            mView.getSimulationPanel().zoomOut();
+            mView.getDisplayPanel().zoomOut();
             updateZoomButtons();
         });
     }
@@ -139,7 +141,7 @@ public class SimulationController {
     }
 
     private void updateZoomButtons() {
-        SimulationPanel simPanel = mView.getSimulationPanel();
+        DisplayPanel simPanel = mView.getDisplayPanel();
 
         mView.getZoomInButton().setEnabled(simPanel.canZoomIn());
         mView.getZoomOriginalButton().setEnabled(simPanel.canZoomOriginal());
