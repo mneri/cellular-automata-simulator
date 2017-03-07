@@ -72,7 +72,7 @@ public class Diagram implements Paintable {
         ENTROPY("Entropy"),
         JOINT_ENTROPY("Joint Entropy"),
         CONDITIONAL_ENTROPY("Conditional Entropy"),
-        ENTROPY_RATE("Entropy Rate");
+        ENTROPY_RATE("Block entropy");
 
         private static final Map<String, Enum> STRING_ENUM_MAP;
 

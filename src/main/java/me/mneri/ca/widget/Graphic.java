@@ -44,7 +44,7 @@ public class Graphic extends JPanel {
 
         int rowsX = 50;
         int rowsY = 40;
-        int nStepY = 40;
+        int nStepY = 20;
 
         int xStepSize = (sizex - (2 * padding)) / rowsX;
         int yStepSize = (sizey - (2 * padding)) / rowsY;

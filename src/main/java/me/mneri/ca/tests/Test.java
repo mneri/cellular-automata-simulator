@@ -12,8 +12,8 @@ public class Test {
 
     public static void main(String[] args) throws Exception {
 
-        int rows = 800;
-        int cols = 200;
+        int rows = 600;
+        int cols = 150;
         int maxStep = 101;
 
         // Lizier calculators
@@ -21,7 +21,7 @@ public class Test {
         erCalc.initialise();
 
         int[][] matrix = new int[rows][cols];
-        int rule = 54;
+        int rule = 30;
         Automaton history = new Automaton(AutomatonState.random(new ElementaryRule(rule), cols));
         history.tick(rows);
         history.toArray(matrix);
@@ -56,7 +56,7 @@ public class Test {
 
         // graph
         JFrame jf = new JFrame();
-        Graphic panel = new Graphic(er, false, "Derived (1 times) H(k) for each k", rule);
+        Graphic panel = new Graphic(er, true, "Derived (1 times) H(k) for each k", rule);
         panel.setVisible(true);
         jf.add(panel);
         jf.setVisible(true);
@@ -73,7 +73,7 @@ public class Test {
 
         // graph
         JFrame jf2 = new JFrame();
-        Graphic panel2 = new Graphic(er, false, "Derived (2 times) H(k) for each k ", rule);
+        Graphic panel2 = new Graphic(er, true, "Derived (2 times) H(k) for each k ", rule);
         panel2.setVisible(true);
         jf2.add(panel2);
         jf2.setVisible(true);
