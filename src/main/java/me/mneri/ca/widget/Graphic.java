@@ -35,7 +35,7 @@ public class Graphic extends JPanel {
         Font font = getFont();
         g.setFont(new Font("default", Font.BOLD, 20));
         g.drawString(str, sizex / 3 - 0, padding / 2);
-        g.drawString("RULE: " + srule, sizex / 2 - 0, padding / 2 + 30);
+        g.drawString("RULE: " + srule, sizex / 2 - 0, padding / 2);
 
         g.setFont(font);
 

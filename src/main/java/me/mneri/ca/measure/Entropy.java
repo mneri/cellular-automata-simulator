@@ -234,22 +234,19 @@ public class Entropy {
 
         int rows = matrix.length;
 
-        double[] der1 = new double[rows - 1];
-        double[] der2 = new double[rows - 2];
+        double[] der = new double[rows];
 
-        for (int i = 1; i < rows; i++) {
-            // calculate first differences
-            der1[i - 1] = averagedBlockEntropy(matrix, i) - averagedBlockEntropy(matrix, i - 1);
+        // calculate block entropies
+        for (int i = 0; i < rows; i++)
+            der[i] = averagedBlockEntropy(matrix, i);
 
-            // calculate the seconds
-            if (i > 1)
-                der2[i - 2] = der1[i-1] - der1[i - 2];
-        }
+        // calculate differences
+        for (int l = 0; l <= liv; l++)
+            for (int i = 1; i < rows; i++)
+                der[i - 1] = der[i] - der[i - 1];
 
-        if (liv == 0)
-            return der1;
-        else
-            return der2;
+        return der;
+
     }
 
     public static double[] derivedBlockEntropy(int[][] matrix) {
