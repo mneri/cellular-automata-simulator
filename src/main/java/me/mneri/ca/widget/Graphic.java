@@ -15,15 +15,13 @@ public class Graphic extends JPanel {
     int padding = 50;
     String str = "";
     String srule = "";
-    int negated = -1;
 
     private double[] vett;
 
-    public Graphic(double[] x, boolean negate, String title, int rule) {
+    public Graphic(double[] x, String title, int rule) {
         vett = x;
         str = title;
         setPreferredSize(new Dimension(sizex, sizey));
-        negated = negate ? -1 : 1;
         srule = " " + rule;
     }
 
@@ -87,12 +85,12 @@ public class Graphic extends JPanel {
         xStepSize = (sizex - (2 * padding)) / rowsX;
         yStepSize = ((sizey - 2 * padding) / rowsY) * nStepY;
         // first
-        g.fillOval(index - 1, y - 1 - negated * (int) (vett[0] * yStepSize), 3, 3);
+        g.fillOval(index - 1, y - 1 - (int) (vett[0] * yStepSize), 3, 3);
         index += xStepSize;
         for (int i = 1; i <= rowsX; i++) {
-            g.fillOval(index - 1, y - 1 - negated * (int) (vett[i] * yStepSize), 3, 3);
-            g.drawLine(index - xStepSize, y - negated * (int) (vett[i - 1] * yStepSize), index,
-                    y - negated * (int) (vett[i] * yStepSize));
+            g.fillOval(index - 1, y - 1 - (int) (vett[i] * yStepSize), 3, 3);
+            g.drawLine(index - xStepSize, y - (int) (vett[i - 1] * yStepSize), index,
+                    y - (int) (vett[i] * yStepSize));
 
             // gray line for projection of the function point (y -> vett[i])
             // if (i <= 10) {

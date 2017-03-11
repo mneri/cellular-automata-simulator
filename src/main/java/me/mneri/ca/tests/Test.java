@@ -26,24 +26,26 @@ public class Test {
         history.tick(rows);
         history.toArray(matrix);
 
-        double[] er = new double[rows];
+        double[] abe = new double[rows];
+        
         
         System.out.printf("Block Entropy \n\n");
         for (int i = 0; i < rows; i++) {
-            er[i] = Entropy.averagedBlockEntropy(matrix, i);
-            System.out.printf("%d-> %f   \n", i, er[i]);
+            abe[i] = Entropy.averagedBlockEntropy(matrix, i);
+            System.out.printf("%d-> %f   \n", i, abe[i]);
         }
         System.out.printf("\n");
 
         // graph
         JFrame jf4 = new JFrame();
-        Graphic panel4 = new Graphic(er, false, "Block Entropy", rule);
+        Graphic panel4 = new Graphic(abe, "Block Entropy", rule);
         panel4.setVisible(true);
         jf4.add(panel4);
         jf4.setVisible(true);
         jf4.pack();
         
-        er = Entropy.derivedBlockEntropy(matrix, 0);
+        double[] er = new double[rows];
+        er = Entropy.derivedBlockEntropy(abe, 0);
 
 //        System.out.printf("Derived 1: \n\n");
 //        for (int i = 0; i < rows - 1 && i < maxStep; i++) {
@@ -53,13 +55,13 @@ public class Test {
 
         // graph
         JFrame jf = new JFrame();
-        Graphic panel = new Graphic(er, true, "Derived (1 times)", rule);
+        Graphic panel = new Graphic(er, "Derived (1 times)", rule);
         panel.setVisible(true);
         jf.add(panel);
         jf.setVisible(true);
         jf.pack();
 
-        er = Entropy.derivedBlockEntropy(matrix, 1);
+        er = Entropy.derivedBlockEntropy(abe, 1);
         
 //        System.out.printf("Derived 2: \n\n");
 //        for (int i = 0; i < rows - 2 && i < maxStep; i++) {
@@ -70,7 +72,7 @@ public class Test {
 
         // graph
         JFrame jf2 = new JFrame();
-        Graphic panel2 = new Graphic(er, true, "Derived (2 times)", rule);
+        Graphic panel2 = new Graphic(er, "Derived (2 times)", rule);
         panel2.setVisible(true);
         jf2.add(panel2);
         jf2.setVisible(true);

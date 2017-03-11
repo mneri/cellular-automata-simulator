@@ -230,27 +230,27 @@ public class Entropy {
 
     // return an array of differences of crescent k-entropy rate
     // or second differences
-    public static double[] derivedBlockEntropy(int[][] matrix, int liv) {
+    public static double[] derivedBlockEntropy(double[] abe, int liv) {
 
-        int rows = matrix.length;
-
+        int rows = abe.length;
         double[] der = new double[rows];
 
-        // calculate block entropies
-        for (int i = 0; i < rows; i++)
-            der[i] = averagedBlockEntropy(matrix, i);
-
-        // calculate differences
-        for (int l = 0; l <= liv; l++)
-            for (int i = 1; i < rows; i++)
-                der[i - 1] = der[i] - der[i - 1];
+        // calculate first difference
+        for (int i = 1; i < rows; i++)
+            der[i - 1] = -(abe[i] - abe[i - 1]);
+        
+       if(liv==1){
+        // calculate second difference
+           for (int i = 1; i < rows; i++)
+               der[i - 1] = -(der[i] - der[i - 1]);
+        }
 
         return der;
 
     }
 
-    public static double[] derivedBlockEntropy(int[][] matrix) {
-        return derivedBlockEntropy(matrix, 1);
+    public static double[] derivedBlockEntropy(double[] abe) {
+        return derivedBlockEntropy(abe, 1);
     }
 
     // calculate single value occurrences in a stream
