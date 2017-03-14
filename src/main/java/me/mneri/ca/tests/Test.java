@@ -12,10 +12,11 @@ public class Test {
 
     public static void main(String[] args) throws Exception {
 
-        int rows = 2000;
-        int cols = 150;
+        int rows = 3000;
+        int cols = 500;
         int[][] matrix = new int[rows][cols];
-        int rule = 18;
+        int rule = 110;
+        int maxIter=1000;
 
         // Lizier calculators
 //        EntropyRateCalculatorDiscrete erCalc = new EntropyRateCalculatorDiscrete(2, 2);
@@ -28,9 +29,8 @@ public class Test {
 
         double[] abe = new double[rows];
         
-        
         System.out.printf("Block Entropy \n\n");
-        for (int i = 0; i < rows; i++) {
+        for (int i = 0; i < maxIter; i++) {
             abe[i] = Entropy.averagedBlockEntropy(matrix, i);
             System.out.printf("%d-> %f   \n", i, abe[i]);
         }
