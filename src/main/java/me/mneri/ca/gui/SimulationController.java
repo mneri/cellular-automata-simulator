@@ -4,6 +4,7 @@ import me.mneri.ca.app.Application;
 import me.mneri.ca.app.Settings;
 import me.mneri.ca.automaton.Automaton;
 import me.mneri.ca.automaton.AutomatonState;
+import me.mneri.ca.color.Gradient;
 import me.mneri.ca.color.HsbGradient;
 import me.mneri.ca.diagram.*;
 import me.mneri.ca.automaton.ElementaryRule;
@@ -36,6 +37,7 @@ public class SimulationController {
 
     private void attachSettingsCallbacks() {
         Settings settings = Application.instance().getSettings();
+        settings.addSettingsListener(this::updateDiagram);
     }
 
     private void attachViewCallbacks() {
@@ -162,9 +164,11 @@ public class SimulationController {
                 throw new IllegalArgumentException();
         }
 
+        Settings settings = Application.instance().getSettings();
+        Gradient gradient = new HsbGradient(settings.getCellColorLow(), settings.getCellColorHigh());
         Diagram diagram = new Diagram.Builder()
                 .setAutomaton(mModel.getAutomaton())
-                .setGradient(new HsbGradient(Color.GREEN, Color.RED))
+                .setGradient(gradient)
                 .setPreprocessor(preproc)
                 .setSize(1024, 1024)
                 .build();
