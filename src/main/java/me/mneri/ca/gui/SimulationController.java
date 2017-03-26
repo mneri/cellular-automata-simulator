@@ -8,6 +8,8 @@ import me.mneri.ca.color.Gradient;
 import me.mneri.ca.color.HsbGradient;
 import me.mneri.ca.diagram.*;
 import me.mneri.ca.automaton.ElementaryRule;
+import me.mneri.ca.interpolator.Interpolator;
+import me.mneri.ca.interpolator.InterpolatorEnum;
 import me.mneri.ca.widget.DisplayPanel;
 
 import javax.swing.*;
@@ -165,7 +167,8 @@ public class SimulationController {
         }
 
         Settings settings = Application.instance().getSettings();
-        Gradient gradient = new HsbGradient(settings.getCellColorLow(), settings.getCellColorHigh());
+        Interpolator inter = InterpolatorEnum.fromString(settings.getInterpolator()).toInterpolator();
+        Gradient gradient = new HsbGradient(settings.getCellColorLow(), settings.getCellColorHigh(), inter);
         Diagram diagram = new Diagram.Builder()
                 .setAutomaton(mModel.getAutomaton())
                 .setGradient(gradient)
