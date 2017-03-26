@@ -14,8 +14,7 @@ public class SettingsView extends JFrame {
     private static final int PADDING = 4;
 
     private ColorPreviewTextField mColorHighField;
-    private ColorPreviewTextField mColorLowField;
-    private ColorPreviewTextField mBackgroundField;
+    private ColorPreviewTextField mColorLowField;;
     private GradientPreview mGradientPreview;
     private JComboBox<InterpolatorEnum> mInterpolatorComboBox;
     private JComboBox<String> mIterationsComboBox;
@@ -69,12 +68,6 @@ public class SettingsView extends JFrame {
         JComponent panel = createFramedPanel("Interface");
         panel.setLayout(new GridLayout(0, 2));
 
-        JLabel backgroundLabel = new JLabel("Background Color");
-        mBackgroundField = new ColorPreviewTextField();
-        backgroundLabel.setLabelFor(mBackgroundField);
-        panel.add(backgroundLabel);
-        panel.add(mBackgroundField);
-
         JLabel highColorLabel = new JLabel("Cell Color High");
         mColorHighField = new ColorPreviewTextField();
         panel.add(highColorLabel);
@@ -96,10 +89,6 @@ public class SettingsView extends JFrame {
         panel.add(mGradientPreview);
 
         return panel;
-    }
-
-    ColorPreviewTextField getBackgroundColorField() {
-        return mBackgroundField;
     }
 
     ColorPreviewTextField getCellColorHighField() {

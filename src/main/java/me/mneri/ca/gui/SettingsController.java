@@ -10,7 +10,6 @@ import javax.swing.*;
 import me.mneri.ca.color.HsbGradient;
 import me.mneri.ca.interpolator.Interpolator;
 import me.mneri.ca.interpolator.InterpolatorEnum;
-import me.mneri.ca.color.Colors;
 
 public class SettingsController {
     private static final InterpolatorEnum[] INTERPOLATORS = {LINEAR, ACCELERATE, DECELERATE, ACCELERATE_DECELERATE};
@@ -30,13 +29,10 @@ public class SettingsController {
     }
 
     private void attachModelCallbacks() {
-        mModel.addListener(() -> {
-            updateGradientPreview();
-        });
+        mModel.addListener(this::updateGradientPreview);
     }
 
     private void attachViewCallbacks() {
-        mView.getBackgroundColorField().addColorListener((Color color) -> mModel.setBackgroundColor(color));
         mView.getCellColorHighField().addColorListener((Color color) -> mModel.setCellColorHigh(color));
         mView.getCellColorLowField().addColorListener((Color color) -> mModel.setCellColorLow(color));
         mView.getInterpolatorComboBox().addActionListener((ActionEvent e) -> {
@@ -63,7 +59,6 @@ public class SettingsController {
     }
 
     private void init() {
-        mView.getBackgroundColorField().setColor(mModel.getBackgroundColor());
         mView.getCellColorHighField().setColor(mModel.getCellColorHigh());
         mView.getCellColorLowField().setColor(mModel.getCellColorLow());
         JComboBox<InterpolatorEnum> interpolatorCombo = mView.getInterpolatorComboBox();
@@ -82,8 +77,8 @@ public class SettingsController {
     }
 
     private void updateGradientPreview() {
-        Color start = mModel.getCellColorHigh();
-        Color end = mModel.getCellColorLow();
+        Color start = mModel.getCellColorLow();
+        Color end = mModel.getCellColorHigh();
         Interpolator inter = mModel.getInterpolator().toInterpolator();
         mView.getGradientPreview().setGradient(new HsbGradient(start, end, inter, 20));
     }
