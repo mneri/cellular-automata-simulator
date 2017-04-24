@@ -80,7 +80,7 @@ public class SimulationController {
         });
         mView.getRuleSpinner().addChangeListener(changeEvent -> {
             int rule = (int) mView.getRuleSpinner().getValue();
-            Automaton automaton = new Automaton(AutomatonState.random(new ElementaryRule(rule), 1024));
+            Automaton automaton = new Automaton(AutomatonState.random(new ElementaryRule(rule),1024));
 
             new Thread(() -> {
                 automaton.tick(1024);
